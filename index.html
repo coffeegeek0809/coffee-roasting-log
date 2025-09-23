@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Coffee Roast Log</title>
+<title>ROASTING LOG - 珈琲焙煎管理</title>
 <style>
 body { font-family: sans-serif; margin:0; padding:0; background:#f3ebe0; display:flex; flex-direction:column; align-items:center; }
-.container { max-width:900px; width:100%; padding:20px; background:#fff8f0; margin:20px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.1);}
+.container { max-width:900px; width:95%; padding:20px; background:#fff8f0; margin:20px auto; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.1);}
 h1,h3 { color:#5a3e2b; text-align:center; }
 label { font-weight:bold; color:#5a3e2b; display:flex; flex-direction:column; }
 input, button, textarea, select { margin:5px 0; padding:8px; width: 100%; box-sizing: border-box; border-radius:5px; border:1px solid #ccc; }
@@ -20,11 +20,10 @@ button:hover { background:#a0522d; }
 #timerControls button { flex: 1 1 40%; margin:5px; min-width:120px; padding:10px; }
 #filters {
     display: flex;
-    flex-wrap: wrap;
     gap: 10px 15px;
     margin-bottom: 15px;
     align-items: center;
-    justify-content: right;
+    justify-content: flex-end;
     font-size: small;
 }
 #filters label {
@@ -42,99 +41,100 @@ button:hover { background:#a0522d; }
 table { border-collapse: collapse; width: 100%; margin-top:10px; overflow-x:auto; display:block; background:#fff8f0; }
 th, td { border: 1px solid #ccc; padding:5px; text-align: center; white-space: nowrap; }
 tr:hover { background-color: #f0e6dc; cursor:pointer; }
-#tempChart { margin-top:10px; background:white; padding:10px; border-radius:8px; box-shadow:0 0 5px #ccc; }
+.temp-chart-container { display: flex; justify-content: center;}
+#tempChart { width: 100%;  height:auto; margin-top:10px; background:white; padding:10px; border-radius:8px; box-shadow:0 0 5px #ccc; }
 #tempLogDisplay { margin-top:5px; font-size:0.9em; color:#5a3e2b; }
 
-/* 温度記録 横並び */
-.temp-input-container {
-    display: flex;
-    align-items: center;
-    justify-content: right;
-    gap: 10px;
-    margin-top: 10px;
-    font-size: small;
-}
+.temp-input-container { display: flex; align-items: center; justify-content: flex-end; gap: 10px; margin-top: 10px; font-size: small; width: 100%;overflow: auto; white-space: nowrap; box-sizing: border-box; }
 .temp-input-container label { font-weight: bold; color: #5a3e2b; min-width: fit-content; text-align: center; }
 .temp-input-container input { width: fit-content; font-size: x-small; padding: 8px; border: 1px solid #ccc; border-radius: 6px; }
 .temp-input-container button { width: 150px; padding: 8px; background-color: #8B4513; color: white; border: none; border-radius: 6px; cursor: pointer; }
 
-#button { display: flex; flex-wrap: wrap; gap: 10pt; justify-content: right; }
-#filterBtn { width: 70pt; font-size: x-small; }
-#addTempBtn { width: 70pt;  font-size: x-small; }
+#button { display: flex; flex-wrap: wrap; gap: 10pt; justify-content: flex-end; }
+#filterBtn, #exportCsvBtn, #addTempBtn { width: 70pt; font-size: x-small; }
 
-/* 親 div をフレックスにして中央揃え */
 .table-container { display: flex; justify-content: center; overflow-x: auto; }
-/* テーブル自体は自動幅 */
 #historyTable {
     border-collapse: collapse;
     width: auto;
     background: #fff8f0;
     font-size: small;
 }
+#historyTable thead { background-color: #d6bfae; color: #5a3e2b; }
+#historyTable th {text-align: center; padding: 5px; border: 1px solid #ccc;
+} 
+#historyTable td { text-align: left; padding: 5px; border: 1px solid #ccc; }
 
-#historyTable thead {
-    background-color: #d6bfae; /* お好みの色に変更 */
-    color: #5a3e2b;            /* 文字色も変更可能 */
+/* コメント列は省略表示 */
+#historyTable th.comment-col,
+#historyTable td.comment-col {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
 }
 
-/* セル文字を左寄せ */
-#historyTable th, #historyTable td { text-align: left; padding: 5px; border: 1px solid #ccc; }
+/* お気に入りセル */
+#historyTable td.favorite-cell { font-size: 18px; color: goldenrod; cursor: pointer; text-align:center; }
 
-/* 初期状態：省略表示 */
-#historyTable th:last-child,
-#historyTable td:last-child {
-    max-width: 200px;       /* 最大幅 */
-    overflow: hidden;       /* はみ出しを隠す */
-    text-overflow: ellipsis;/* はみ出し部分を「…」で表示 */
-    white-space: nowrap;    /* 改行をさせない */
-    cursor: pointer;        /* クリックできることを示す */
+/* 編集/削除列（お気に入りの右隣） */
+#historyTable td.operation-col {
+    width: fit-content; /* 必要に応じて調整 */
+    white-space: nowrap;
+    text-align: center;
 }
 
+/* 編集・削除ボタンをアイコン形式で小さく */
+.edit-btn, .delete-btn {
+    display: inline-block;   /* 横並びにする */
+    width: 28px;
+    height: 28px;
+    margin: 0 2px;           /* 左右に少し余白 */
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+}
+.edit-btn { background:#4caf50; color:white; }
+.delete-btn { background:#d9534f; color:white; }
 
-/* モーダル全体（画面を覆う） */
-.modal {
-  display: none; /* 初期は非表示 */
-  position: fixed;
-  z-index: 1000;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0,0,0,0.5); /* 半透明背景 */
-}
-
-/* モーダル内容 */
-.modal-content {
-  background-color: #fff8f0;
-  margin: 10% auto;
-  padding: 20px;
-  border-radius: 10px;
-  width: 80%;
-  max-width: 500px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.3);
-}
-
-.modal-content p {
-    white-space: pre-wrap;   /* 折り返し＆改行を保持 */
-    word-wrap: break-word;   /* 単語の途中でも折り返す */
-}
-.modal-title {
-    font-weight: bold;
-    font-size: 1.1em;
-    margin-bottom: 10px;
-    color: #5a3e2b;
-}
-
-/* 閉じるボタン */
-.close {
-  color: #aaa;
-  float: right;
-  font-size: 24px;
-  font-weight: bold;
-  cursor: pointer;
-}
+/* モーダル */
+.modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5); }
+.modal-content { background-color: #fff8f0; margin: 6% auto; padding: 20px; border-radius: 10px; width: 90%; max-width: 600px; box-shadow: 0 0 10px rgba(0,0,0,0.3); }
+.modal-content p { white-space: pre-wrap; word-wrap: break-word; }
+.modal-title { font-weight: bold; font-size: 1.1em; margin-bottom: 10px; color: #5a3e2b; }
+.close { color: #aaa; float: right; font-size: 24px; font-weight: bold; cursor: pointer; }
 .close:hover { color: #000; }
+
+.form-row { display:flex; gap:8px; align-items:center; margin-bottom:8px; }
+.form-row label { flex:1; font-weight:normal; }
+.form-row input, .form-row textarea { flex:2; }
+
+/* 小型スマホ用 */
+@media (max-width: 480px) {
+  body { font-size: 14px; }
+  h1 { font-size: 1.5em; }
+  h3 { font-size: 1.2em; }
+
+  #roastForm label { flex: 1 1 100%; }
+  #timerControls button { min-width: 70px; font-size: 0.8em; padding: 6px; }
+  .temp-input-container { display: flex;  justify-content: flex-start; }
+  #button { justify-content: flex-end; }
+  #filters { display: flex; flex-direction: row; align-items: center; justify-content:flex-start; gap:10px; overflow-x: auto; white-space: nowrap; padding: 5px 0; box-sizing: border-box;}
+  #filters select { width: 50pt; }
+  .modal-content { width: 90%; max-width: 90%; }
+  .container { width: 85%; padding: 15px; }
+}
+
+/* タブレット用 */
+@media (max-width: 768px) {
+  #roastForm label { flex: 1 1 100%; }
+  #timerControls button { min-width: 100px; }
+  .container { width: 90%; padding: 18px; }
+}
+
 
 
 </style>
@@ -143,7 +143,7 @@ tr:hover { background-color: #f0e6dc; cursor:pointer; }
 </head>
 <body>
 <div class="container">
-<h1>Coffee Roast Log</h1>
+<h1>COFFEE ROASTING LOG</h1>
 
 <h3>基本情報</h3>
 <div id="roastForm">
@@ -177,13 +177,19 @@ tr:hover { background-color: #f0e6dc; cursor:pointer; }
         <button id="addTempBtn">記録</button>
     </div>
 <div id="tempLogDisplay"></div>
+<div class="temp-chart-container">
 <canvas id="tempChart"></canvas>
+</div>
 </div>
 
 <h3>焙煎記録</h3>
+<!-- 省略: 上部は現状コードと同じ -->
 <div id="button">
     <button id="filterBtn">記録を表示</button>
+    <!-- CSV出力ボタン追加 -->
+    <button id="exportCsvBtn">CSV出力</button>
 </div>
+
 <div id="filters">
   <label>豆：
     <select id="filterBean"><option value="">ALL</option></select>
@@ -208,8 +214,10 @@ tr:hover { background-color: #f0e6dc; cursor:pointer; }
   <table id="historyTable">
     <thead>
       <tr>
+        <th>お気に入り</th>
+        <th class="operation-col">編集/削除</th> <!-- ここを追加 -->
         <th>豆</th><th>焙煎日</th><th>投入温度(℃)</th><th>焙煎前(g)</th><th>焙煎後(g)</th>
-        <th>焙煎度</th><th>1ハゼ</th><th>2ハゼ</th><th>所要時間</th><th>コメント(クリックで全体を表示)</th>
+        <th>焙煎度</th><th>1ハゼ</th><th>2ハゼ</th><th>所要時間</th><th class="comment-col">コメント(クリックで全体を表示)</th>
       </tr>
     </thead>
     <tbody></tbody>
@@ -219,12 +227,27 @@ tr:hover { background-color: #f0e6dc; cursor:pointer; }
 <!-- コメント表示用モーダル -->
 <div id="commentModal" class="modal">
   <div class="modal-content">
-    <span class="close">&times;</span>
-    <div class="modal-title" id="modalTitle"></div> <!-- 追加 -->
+    <span class="close" id="closeCommentModal">&times;</span>
+    <div class="modal-title" id="modalTitle"></div>
     <p id="modalText"></p>
   </div>
 </div>
 
+<!-- 編集用モーダル -->
+<div id="editModal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="editClose">&times;</span>
+    <h3>焙煎記録の編集</h3>
+    <div class="form-row"><label>豆名</label><input id="editBean" type="text"></div>
+    <div class="form-row"><label>焙煎日</label><input id="editDate" type="date"></div>
+    <div class="form-row"><label>投入温度(℃)</label><input id="editTemp" type="number"></div>
+    <div class="form-row"><label>焙煎前(g)</label><input id="editPre" type="number" oninput="calcAndUpdateEditRoast()"></div>
+    <div class="form-row"><label>焙煎後(g)</label><input id="editPost" type="number" oninput="calcAndUpdateEditRoast()"></div>
+    <div class="form-row"><label>焙煎度</label><input id="editLevel" type="text" readonly></div>
+    <div class="form-row"><label>コメント</label><textarea id="editComment" rows="4"></textarea></div>
+    <div style="text-align:right;"><button id="editSave">保存</button></div>
+  </div>
+</div>
 
 </div>
 
@@ -233,6 +256,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let roastTimer=0, timerInterval=null;
   let temperatureLog=[], firstCrackTimes=[], secondCrackTimes=[], roastEndTime=null;
   let chart=null, historyLog=null;
+  let editingId = null; // 編集対象の id
 
   function secToHMS(sec){ const h=Math.floor(sec/3600), m=Math.floor((sec%3600)/60), s=sec%60; return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`; }
   function displayTimer(sec){ document.getElementById("timerDisplay").innerText = secToHMS(sec); }
@@ -250,25 +274,58 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // --- data sanity: 不完全な既存ログを補完 ---
+  function ensureLogSanity(){
+    const logs = JSON.parse(localStorage.getItem("roastLogs"))||[];
+    let changed = false;
+    for(let i=0;i<logs.length;i++){
+      const l = logs[i];
+      if(!l.id){ l.id = Date.now().toString() + '-' + Math.random().toString(36).slice(2,8); changed = true; }
+      if(typeof l.favorite === 'undefined'){ l.favorite = false; changed = true; }
+      if(!Array.isArray(l.temperatureLog)) { l.temperatureLog = l.temperatureLog || []; changed = true; }
+      if(!Array.isArray(l.firstCrackTimes)) { l.firstCrackTimes = l.firstCrackTimes || []; changed = true; }
+      if(!Array.isArray(l.secondCrackTimes)) { l.secondCrackTimes = l.secondCrackTimes || []; changed = true; }
+      if(typeof l.roastEndTime === 'undefined') { l.roastEndTime = l.roastEndTime ?? null; changed = true; }
+    }
+    if(changed) localStorage.setItem("roastLogs", JSON.stringify(logs));
+  }
+
   function populateFilterOptions(){
+    ensureLogSanity();
     const logs=JSON.parse(localStorage.getItem("roastLogs"))||[];
     const beanSet=new Set(), yearSet=new Set(), monthSet=new Set();
     logs.forEach(log=>{
       beanSet.add(log.beanName);
       const d=new Date(log.roastDate);
-      yearSet.add(d.getFullYear());
-      monthSet.add(d.getMonth()+1);
+      if(!isNaN(d)) {
+        yearSet.add(d.getFullYear());
+        monthSet.add(d.getMonth()+1);
+      }
     });
     const beanSelect=document.getElementById("filterBean");
     const yearSelect=document.getElementById("filterYear");
     const monthSelect=document.getElementById("filterMonth");
-    beanSet.forEach(b=>{ if(!Array.from(beanSelect.options).some(o=>o.value===b)){ const opt=document.createElement("option"); opt.value=b; opt.text=b; beanSelect.add(opt); } });
-    Array.from(yearSet).sort().forEach(y=>{ if(!Array.from(yearSelect.options).some(o=>o.value==y)){ const opt=document.createElement("option"); opt.value=y; opt.text=y; yearSelect.add(opt); } });
-    Array.from(monthSet).sort().forEach(m=>{ if(!Array.from(monthSelect.options).some(o=>o.value==m)){ const opt=document.createElement("option"); opt.value=m; opt.text=m; monthSelect.add(opt); } });
+    // いったんリセットしてから追加（重複防止）
+    beanSelect.innerHTML = '<option value="">ALL</option>';
+    yearSelect.innerHTML = '<option value="">ALL</option>';
+    monthSelect.innerHTML = '<option value="">ALL</option>';
+    Array.from(beanSet).sort().forEach(b=>{
+      const opt=document.createElement("option");
+      opt.value=b; opt.text=b; beanSelect.add(opt);
+    });
+    Array.from(yearSet).sort().forEach(y=>{
+      const opt=document.createElement("option");
+      opt.value=y; opt.text=y; yearSelect.add(opt);
+    });
+    Array.from(monthSet).sort().forEach(m=>{
+      const opt=document.createElement("option");
+      opt.value=m; opt.text=m; monthSelect.add(opt);
+    });
   }
 
+  // --- 表示（フィルタ適用） ---
   function displayHistory(){
-
+    ensureLogSanity();
     const tbody=document.querySelector("#historyTable tbody");
     const logs=JSON.parse(localStorage.getItem("roastLogs"))||[];
     const beanFilter=document.getElementById("filterBean").value;
@@ -280,7 +337,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const d=new Date(log.roastDate);
       const roastYear=d.getFullYear();
       const roastMonth=d.getMonth()+1;
-      const roastLevel=log.roastLevel.split("（")[0];
+      const roastLevel=log.roastLevel?log.roastLevel.split("（")[0]:"";
       if(beanFilter && log.beanName!==beanFilter) return false;
       if(yearFilter && roastYear!==parseInt(yearFilter)) return false;
       if(monthFilter && roastMonth!==parseInt(monthFilter)) return false;
@@ -289,61 +346,175 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     tbody.innerHTML="";
-    filteredLogs.forEach(log=>{
+    filteredLogs.forEach((log)=>{
       const tr=document.createElement("tr");
+      const star = log.favorite ? "★" : "☆";
       tr.innerHTML=`
+        <td class="favorite-cell" data-id="${log.id}">${star}</td>
+        <td class="operation-col">
+          <button class="edit-btn" data-id="${log.id}" title="編集">✏</button>
+          <button class="delete-btn" data-id="${log.id}" title="削除">🗑</button>
+        </td>
         <td>${log.beanName}</td>
         <td>${log.roastDate}</td>
-        <td>${log.inputTemp}</td>
-        <td>${log.preWeight}</td>
-        <td>${log.postWeight}</td>
-        <td>${log.roastLevel}</td>
-        <td>${log.firstCrackTimes.map(secToHMS).join(', ')}</td>
-        <td>${log.secondCrackTimes.map(secToHMS).join(', ')}</td>
-        <td>${log.roastEndTime!==null?secToHMS(log.roastEndTime):''}</td>
-        <td>${log.comment}</td>
+        <td>${log.inputTemp ?? ''}</td>
+        <td>${log.preWeight ?? ''}</td>
+        <td>${log.postWeight ?? ''}</td>
+        <td>${log.roastLevel ?? ''}</td>
+        <td>${(log.firstCrackTimes||[]).map(secToHMS).join(', ')}</td>
+        <td>${(log.secondCrackTimes||[]).map(secToHMS).join(', ')}</td>
+        <td>${log.roastEndTime!==null && log.roastEndTime!==undefined?secToHMS(log.roastEndTime):''}</td>
+        <td class="comment-col">${log.comment ?? ''}</td>
       `;
-      tr.onclick=()=>{ historyLog=log; document.getElementById("historyLabel").innerText = "■ 履歴参照中: " + log.beanName + " / " + log.roastDate; updateChart(); };
+      tr.addEventListener('click', ()=>{ historyLog = log; document.getElementById("historyLabel").innerText = "■ 履歴参照中: " + log.beanName + " / " + log.roastDate; updateChart(); });
       tbody.appendChild(tr);
     });
 
-document.querySelectorAll("#historyTable td:last-child").forEach(td => {
-    td.addEventListener("click", () => {
-        // コメントをモーダルにセット
-        document.getElementById("modalText").innerText = td.innerText;
+    // --- attach events for newly created elements ---
 
-        // モーダルタイトルに豆情報・焙煎日・焙煎度を表示
-        const tr = td.parentElement;
-        const bean = tr.cells[0].innerText;
-        const date = tr.cells[1].innerText;
-        const level = tr.cells[5].innerText;
-        document.getElementById("modalTitle").innerText = `${bean} / ${date} / ${level}`;
-
-        // モーダル表示
-        document.getElementById("commentModal").style.display = "block";
+    // お気に入り切替
+    document.querySelectorAll(".favorite-cell").forEach(cell=>{
+      cell.addEventListener("click",(e)=>{
+        e.stopPropagation();
+        const id = cell.dataset.id;
+        const logsAll = JSON.parse(localStorage.getItem("roastLogs"))||[];
+        const idxAll = logsAll.findIndex(l=>l.id === id);
+        if(idxAll>=0){
+          logsAll[idxAll].favorite = !logsAll[idxAll].favorite;
+          localStorage.setItem("roastLogs", JSON.stringify(logsAll));
+          populateFilterOptions();
+          displayHistory();
+        }
+      });
     });
-});
 
+    // コメント列クリックでモーダル
+    document.querySelectorAll("#historyTable td.comment-col").forEach(td=>{
+      td.addEventListener("click",(e)=>{
+        e.stopPropagation();
+        const tr = td.parentElement;
+        const bean = tr.cells[2].innerText;
+        const date = tr.cells[3].innerText;
+        const level = tr.cells[7].innerText;
+        document.getElementById("modalText").innerText = td.innerText;
+        document.getElementById("modalTitle").innerText = `${bean} / ${date} / ${level}`;
+        document.getElementById("commentModal").style.display = "block";
+      });
+    });
 
-// 閉じるボタン
-document.querySelector(".close").addEventListener("click", () => {
-    document.getElementById("commentModal").style.display = "none";
-});
+    // 編集ボタン
+    document.querySelectorAll(".edit-btn").forEach(btn=>{
+      btn.addEventListener("click",(e)=>{
+        e.stopPropagation();
+        const id = btn.dataset.id;
+        const logsAll = JSON.parse(localStorage.getItem("roastLogs"))||[];
+        const idxAll = logsAll.findIndex(l=>l.id === id);
+        if(idxAll<0) return;
+        const record = logsAll[idxAll];
+        editingId = id;
+        document.getElementById("editBean").value = record.beanName || "";
+        document.getElementById("editDate").value = record.roastDate || "";
+        document.getElementById("editTemp").value = record.inputTemp ?? "";
+        document.getElementById("editPre").value = record.preWeight ?? "";
+        document.getElementById("editPost").value = record.postWeight ?? "";
+        document.getElementById("editLevel").value = record.roastLevel || "";
+        document.getElementById("editComment").value = record.comment || "";
+        document.getElementById("editModal").style.display = "block";
+      });
+    });
 
-// モーダル背景クリックでも閉じる
-window.addEventListener("click", (event) => {
-    const modal = document.getElementById("commentModal");
-    if(event.target === modal){
-        modal.style.display = "none";
-    }
-});
+    // 削除ボタン
+    document.querySelectorAll(".delete-btn").forEach(btn=>{
+      btn.addEventListener("click",(e)=>{
+        e.stopPropagation();
+        const id = btn.dataset.id;
+        if(!confirm("この記録を削除しますか？")) return;
+        const logsAll = JSON.parse(localStorage.getItem("roastLogs"))||[];
+        const idxAll = logsAll.findIndex(l=>l.id === id);
+        if(idxAll>=0){
+          logsAll.splice(idxAll,1);
+          localStorage.setItem("roastLogs", JSON.stringify(logsAll));
+          populateFilterOptions();
+          displayHistory();
+        }
+      });
+    });
 
+  } // displayHistory end
 
+  // --- モーダル：閉じる（共通） ---
+  document.getElementById("closeCommentModal").addEventListener("click", ()=>{ document.getElementById("commentModal").style.display = "none"; });
+  document.getElementById("editClose").addEventListener("click", ()=>{ document.getElementById("editModal").style.display = "none"; });
+
+  // 背景クリックで閉じる（両モーダルに対応）
+  window.addEventListener("click", (event)=>{
+    const cm = document.getElementById("commentModal");
+    const em = document.getElementById("editModal");
+    if(event.target === cm) cm.style.display = "none";
+    if(event.target === em) em.style.display = "none";
+  });
+
+// 共通計算＆更新関数
+function calcAndUpdateEditRoast() {
+  const pre = parseFloat(document.getElementById("editPre").value);
+  const post = parseFloat(document.getElementById("editPost").value);
+
+  if(pre > 0 && post > 0){
+    const roastIndex = pre / post;
+    let roastLevel = "";
+    if(roastIndex < 1.15) roastLevel = "浅煎り";
+    else if(roastIndex < 1.2) roastLevel = "中煎り";
+    else roastLevel = "深煎り";
+
+    // モーダル表示用
+    document.getElementById("editLevel").value = `${roastLevel}（${roastIndex.toFixed(3)}）`;
+
+    return { roastIndex, roastLevel: `${roastLevel}（${roastIndex.toFixed(3)}）` };
+  } else {
+    document.getElementById("editLevel").value = "";
+    return { roastIndex: null, roastLevel: "" };
   }
+}
 
-  document.getElementById("filterBtn").addEventListener("click", displayHistory);
+// モーダル入力欄のoninputでリアルタイム更新
+document.getElementById("editPre").addEventListener("input", calcAndUpdateEditRoast);
+document.getElementById("editPost").addEventListener("input", calcAndUpdateEditRoast);
+
+// 保存ボタン処理
+document.getElementById("editSave").addEventListener("click", ()=> {
+  if(!editingId){ alert("編集対象が不明です"); return; }
+  const logsAll = JSON.parse(localStorage.getItem("roastLogs"))||[];
+  const idxAll = logsAll.findIndex(l=>l.id === editingId);
+  if(idxAll<0){ alert("対象が見つかりません"); return; }
+
+  const pre = parseFloat(document.getElementById("editPre").value);
+  const post = parseFloat(document.getElementById("editPost").value);
+
+  // 計算関数で焙煎指数と度合を取得
+  const { roastIndex, roastLevel } = calcAndUpdateEditRoast();
+
+  // 保存
+  logsAll[idxAll] = {
+    ...logsAll[idxAll],
+    beanName: document.getElementById("editBean").value,
+    roastDate: document.getElementById("editDate").value,
+    inputTemp: parseFloat(document.getElementById("editTemp").value) || null,
+    preWeight: pre || null,
+    postWeight: post || null,
+    roastIndex,
+    roastLevel,
+    comment: document.getElementById("editComment").value
+  };
+
+  localStorage.setItem("roastLogs", JSON.stringify(logsAll));
   populateFilterOptions();
+  displayHistory();
+  document.getElementById("editModal").style.display = "none";
+});
 
+
+
+  // --- 既存の処理（タイマー・記録追加等） ---
   function startTimer(){
     temperatureLog = [];
     firstCrackTimes = [];
@@ -364,7 +535,6 @@ window.addEventListener("click", (event) => {
   function markFirstCrack(){ const temp=parseFloat(prompt("1ハゼ時の温度(℃)を入力してください","")); if(!isNaN(temp)) temperatureLog.push({time:roastTimer,temp,label:"1ハゼ"}); firstCrackTimes.push(roastTimer); updateTempLogDisplay(); updateChart(); }
   function markSecondCrack(){ const temp=parseFloat(prompt("2ハゼ時の温度(℃)を入力してください","")); if(!isNaN(temp)) temperatureLog.push({time:roastTimer,temp,label:"2ハゼ"}); secondCrackTimes.push(roastTimer); updateTempLogDisplay(); updateChart(); }
 
-  // --- ここが修正版 ---
   function addTemperature() {
     const temp = parseFloat(document.getElementById("tempInput").value);
     if(!isNaN(temp)){
@@ -386,7 +556,7 @@ window.addEventListener("click", (event) => {
 
     const currentData = temperatureLog.map(t=>({x:t.time,y:t.temp}));
     let datasets=[{
-      label:'今回の温度(℃)',
+      label:'今回の焙煎',
       data: currentData,
       borderColor:'#a67c52',
       backgroundColor:'rgba(166,124,82,0.2)',
@@ -401,10 +571,10 @@ window.addEventListener("click", (event) => {
       })
     }];
 
-    if(historyLog){
+    if(historyLog && Array.isArray(historyLog.temperatureLog)){
       const historyData = historyLog.temperatureLog.map(t=>({x:t.time,y:t.temp}));
       datasets.push({
-        label:'履歴温度(℃)',
+        label:'比較対象の焙煎',
         data: historyData,
         borderColor:'#ccc',
         backgroundColor:'rgba(200,200,200,0.2)',
@@ -419,8 +589,8 @@ window.addEventListener("click", (event) => {
     secondCrackTimes.forEach((t,i)=>{ annotations['s'+i]={type:'line', scaleID:'x', value:t, borderColor:'blue', borderWidth:2,label:{display:true, content:'2ハゼ', color:'#fff', backgroundColor:'blue', position:'start', rotation:0}}; });
     if(roastEndTime!==null) annotations['end']={type:'line', scaleID:'x', value:roastEndTime, borderColor:'#5a3e2b', borderWidth:2,label:{display:true, content:'終了', color:'#fff', backgroundColor:'#5a3e2b', position:'start', rotation:0}};
     if(historyLog){
-      historyLog.firstCrackTimes.forEach((t,i)=>{ annotations['hf'+i]={type:'line', scaleID:'x', value:t, borderColor:'#aaa', borderWidth:1, label:{display:true, content:'1ハゼ', color:'#fff', backgroundColor:'#aaa', position:'start', rotation:0}}; });
-      historyLog.secondCrackTimes.forEach((t,i)=>{ annotations['hs'+i]={type:'line', scaleID:'x', value:t, borderColor:'#aaa', borderWidth:1, label:{display:true, content:'2ハゼ', color:'#fff', backgroundColor:'#aaa', position:'start', rotation:0}}; });
+      (historyLog.firstCrackTimes||[]).forEach((t,i)=>{ annotations['hf'+i]={type:'line', scaleID:'x', value:t, borderColor:'#aaa', borderWidth:1, label:{display:true, content:'1ハゼ', color:'#fff', backgroundColor:'#aaa', position:'start', rotation:0}}; });
+      (historyLog.secondCrackTimes||[]).forEach((t,i)=>{ annotations['hs'+i]={type:'line', scaleID:'x', value:t, borderColor:'#aaa', borderWidth:1, label:{display:true, content:'2ハゼ', color:'#fff', backgroundColor:'#aaa', position:'start', rotation:0}}; });
       if(historyLog.roastEndTime!==null) annotations['hend']={type:'line', scaleID:'x', value:historyLog.roastEndTime, borderColor:'#aaa', borderWidth:1, label:{display:true, content:'終了', color:'#fff', backgroundColor:'#aaa', position:'start', rotation:0}};
     }
 
@@ -433,6 +603,8 @@ window.addEventListener("click", (event) => {
       }
     });
   }
+
+  // 保存時に一意の id と favorite を付与して保存（温度ログ等は deep copy）
   function saveRoast(){
     const beanName=document.getElementById("beanName").value;
     const roastDate=document.getElementById("roastDate").value;
@@ -444,13 +616,29 @@ window.addEventListener("click", (event) => {
     if(!beanName || !roastDate || !preWeight || !postWeight){ alert("必須項目を入力してください"); return; }
     const roastIndex=preWeight/postWeight;
     const logs=JSON.parse(localStorage.getItem("roastLogs"))||[];
-    logs.push({beanName,roastDate,inputTemp,preWeight,postWeight,roastIndex,roastLevel,comment,temperatureLog,firstCrackTimes,secondCrackTimes,roastEndTime});
+    const newId = Date.now().toString() + '-' + Math.random().toString(36).slice(2,8);
+    // deep copy for arrays so later edits don't mutate saved record's arrays via reference
+    const tempLogCopy = JSON.parse(JSON.stringify(temperatureLog || []));
+    const fctCopy = JSON.parse(JSON.stringify(firstCrackTimes || []));
+    const sctCopy = JSON.parse(JSON.stringify(secondCrackTimes || []));
+    logs.push({
+      id: newId,
+      beanName, roastDate, inputTemp, preWeight, postWeight, roastIndex, roastLevel, comment,
+      temperatureLog: tempLogCopy, firstCrackTimes: fctCopy, secondCrackTimes: sctCopy, roastEndTime,
+      favorite: false
+    });
     localStorage.setItem("roastLogs",JSON.stringify(logs));
     populateFilterOptions();
     displayHistory();
     alert("保存しました");
   }
-  // --- タイマー & クラックボタン ---
+
+  // HTMLエスケープ（表示安全）
+  function escapeHtml(str){
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  // イベント登録
   document.getElementById("startBtn").addEventListener("click", startTimer);
   document.getElementById("pauseBtn").addEventListener("click", pauseTimer);
   document.getElementById("resetBtn").addEventListener("click", resetTimer);
@@ -458,10 +646,75 @@ window.addEventListener("click", (event) => {
   document.getElementById("secondCrackBtn").addEventListener("click", markSecondCrack);
   document.getElementById("endBtn").addEventListener("click", endTimer);
   document.getElementById("addTempBtn").addEventListener("click", addTemperature);
-  document.getElementById("saveBtn").addEventListener("click",saveRoast);
-  
+  document.getElementById("saveBtn").addEventListener("click", saveRoast);
 
-});
+  // フィルターボタン
+  document.getElementById("filterBtn").addEventListener("click", displayHistory);
+
+  // 初期化
+  populateFilterOptions();
+  //　displayHistory(); // 初回表示（不要ならコメントアウトしてください）
+
+// DOMContentLoaded 内に追加
+
+// CSV出力関数
+function exportCSV() {
+  const logs = JSON.parse(localStorage.getItem("roastLogs")) || [];
+  if(logs.length === 0){ alert("保存データがありません"); return; }
+
+  const headers = ["お気に入り","豆名","焙煎日","焙煎度","焙煎前重量","焙煎後重量","投入温度","1ハゼ","2ハゼ","終了時間","温度ログ","コメント"];
+  
+  const rows = logs.map(log => {
+    const firstCrack = (log.firstCrackTimes||[]).map(formatMMSS).join(";");
+    const secondCrack = (log.secondCrackTimes||[]).map(formatMMSS).join(";");
+    const tempLog = (log.temperatureLog||[])
+      .map(t => `${formatMMSS(t.time)}:${t.temp}℃${t.label?`(${t.label})`:''}`)
+      .join(", ");
+    return [
+      log.favorite?"★":"☆",
+      log.beanName || "",
+      log.roastDate || "",
+      log.roastLevel || "",
+      log.preWeight ?? "",
+      log.postWeight ?? "",
+      log.inputTemp ?? "",
+      firstCrack,
+      secondCrack,
+      log.roastEndTime!==null && log.roastEndTime!==undefined ? formatMMSS(log.roastEndTime) : '',
+      tempLog,
+      log.comment ?? ""
+    ].map(v => `"${v}"`).join(",");
+  });
+
+  const bom = "\uFEFF";
+  const csvContent = bom + [headers.join(","), ...rows].join("\r\n");
+
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth()+1).padStart(2,'0');
+  const dd = String(today.getDate()).padStart(2,'0');
+  a.download = `roast_log_${yyyy}-${mm}-${dd}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+
+// 秒を mm:ss に変換
+function formatMMSS(sec){
+  const m = Math.floor(sec/60);
+  const s = sec%60;
+  return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+
+// CSV出力ボタンイベント
+document.getElementById("exportCsvBtn").addEventListener("click", exportCSV);
+
+
+}); // DOMContentLoaded end
 </script>
 </body>
 </html>
