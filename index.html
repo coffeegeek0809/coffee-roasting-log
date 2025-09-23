@@ -3,7 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ROASTING LOG - 珈琲焙煎管理</title>
+<meta name="description" content="自家焙煎コーヒーの焙煎記録を簡単に管理できるWebアプリ。豆の名前、投入温度、焙煎度、タイマー、温度グラフなどを記録し、過去の焙煎履歴と比較可能。初心者から上級者まで活用できます。">
+
+<title>自家焙煎コーヒー記録管理 | COFFEE ROASTING LOG</title>
 <style>
 body { font-family: sans-serif; margin:0; padding:0; background:#f3ebe0; display:flex; flex-direction:column; align-items:center; }
 footer { 
@@ -25,6 +27,30 @@ footer a:hover { text-decoration:underline; }
 h1,h3 { color:#5a3e2b; text-align:center; }
 label { font-weight:bold; color:#5a3e2b; display:flex; flex-direction:column; }
 input, button, textarea, select { margin:5px 0; padding:8px; width: 100%; box-sizing: border-box; border-radius:5px; border:1px solid #ccc; }
+/* 日付入力欄の高さと背景色を統一 */
+input[type="date"] {
+  height: 36px;          /* 他の input と同じ高さに調整 */
+  background-color: #fff; /* 他の input と同じ背景色 */
+  border: 1px solid #ccc; 
+  border-radius: 5px;
+  padding: 6px 8px;       /* 内側の余白調整 */
+  box-sizing: border-box; 
+  font-size: 14px;        /* フォントサイズを他に合わせる */
+  color: #000;            /* テキスト色 */
+}
+
+/* iOSで灰色になるフォントカラーを強制 */
+input[type="date"]::-webkit-datetime-edit {
+  color: #000; 
+}
+
+/* プレースホルダや矢印部分の調整 */
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-clear-button {
+  -webkit-appearance: none;
+  display: none;
+}
+
 textarea { height:50px; }
 #timerDisplay { font-size:2em; font-weight:bold; margin: 10px 0; text-align:center; color:#d2691e; }
 button { cursor:pointer; background:#8b4513; color:white; border:none; border-radius:5px; }
@@ -218,7 +244,7 @@ tr:hover { background-color: #f0e6dc; cursor:pointer; }
   <label>投入温度(℃):<input id="inputTemp" type="number"></label>
   <label>焙煎前重量(g):<input id="preWeight" type="number"></label>
   <label>焙煎後重量(g):<input id="postWeight" type="number" oninput="updateRoastLevel()"></label>
-  <label>焙煎度合:<input id="roastLevel" type="text" readonly></label>
+  <label>焙煎度:<input id="roastLevel" type="text" readonly></label>
   <label>コメント:<textarea id="comment"></textarea></label>
 </div>
 
