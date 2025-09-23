@@ -6,6 +6,21 @@
 <title>ROASTING LOG - 珈琲焙煎管理</title>
 <style>
 body { font-family: sans-serif; margin:0; padding:0; background:#f3ebe0; display:flex; flex-direction:column; align-items:center; }
+footer { 
+  font-family: sans-serif;
+  width: 100%;
+  text-align:center; 
+  padding:20px; 
+  background:#e8d6c3; /* 背景色を少し濃くしてフッター感 */
+  font-size:10px; 
+  color:#4b3f36;
+}
+footer a { 
+  color:#6b4f3c; 
+  text-decoration:none; 
+  font-weight:500;
+}
+footer a:hover { text-decoration:underline; }
 .container { max-width:900px; width:95%; padding:20px; background:#fff8f0; margin:20px auto; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.1);}
 h1,h3 { color:#5a3e2b; text-align:center; }
 label { font-weight:bold; color:#5a3e2b; display:flex; flex-direction:column; }
@@ -111,6 +126,55 @@ tr:hover { background-color: #f0e6dc; cursor:pointer; }
 .form-row { display:flex; gap:8px; align-items:center; margin-bottom:8px; }
 .form-row label { flex:1; font-weight:normal; }
 .form-row input, .form-row textarea { flex:2; }
+
+  /* PRIVACY POLICY モーダルスタイル */
+  #privacy-modal {
+    display:none;
+    position:fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background:rgba(0,0,0,0.3); /* 少し透過弱め */
+    justify-content:center;
+    align-items:center;
+    z-index:1000;
+  }
+  #privacy-modal .modal-content {
+    background:#fdf6f0; /* サイトの柔らかいベージュ系に統一 */
+    padding:25px 30px;
+    max-width:600px;
+    max-height:80%;
+    overflow:auto;
+    border-radius:15px; /* 角丸を大きめに */
+    position:relative;
+    box-shadow:0 6px 20px rgba(0,0,0,0.25); /* 軽い影で浮かせる */
+  }
+  #privacy-modal .close {
+    position:absolute;
+    top:12px; right:18px;
+    cursor:pointer;
+    font-weight:bold;
+    font-size:20px;
+    color:#4b3f36;
+  }
+  #privacy-modal h2 { 
+    margin-top:0; 
+    color:#6b4f3c;
+    font-size:22px;
+    text-align:center;
+  }
+    #privacy-modal p { 
+    margin-bottom:12px; 
+    line-height:1.6; 
+    font-size:15px;
+    text-align:center; /* センター寄せ */
+  }
+  #privacy-modal li { 
+    margin-bottom:12px; 
+    line-height:1.6; 
+    font-size:15px;
+  }
+  #privacy-modal ol { padding-left:20px; margin:0; }
+
 
 /* 小型スマホ用 */
 @media (max-width: 480px) {
@@ -250,6 +314,58 @@ tr:hover { background-color: #f0e6dc; cursor:pointer; }
 </div>
 
 </div>
+
+<!-- フッター -->
+<footer>
+  <a id="privacy-link">プライバシーポリシー</a>
+</footer>
+
+<!-- モーダル -->
+<div id="privacy-modal">
+  <div class="modal-content">
+    <span class="close" id="close-modal">×</span>
+    <h2>プライバシーポリシー</h2>
+    <p>当サイト「Coffee Roasting Log」（以下「当サイト」）では、ユーザーのプライバシーを尊重し、以下の方針に基づき運営しています。</p>
+    <ol>
+      <li>
+        <strong>データの保存について</strong><br>
+        当サイトでユーザーが入力する焙煎記録などのデータは、ブラウザの localStorage に保存され、サーバーには送信されません。<br>
+        そのため、当サイト側で個人情報や記録を管理・収集することはありません。
+      </li>
+      <li>
+        <strong>広告・アフィリエイトについて</strong><br>
+        当サイトでは Google AdSense 等の広告サービスを利用しています。<br>
+        広告配信事業者は Cookie 等を利用して、ユーザーの興味に基づいた広告を表示する場合があります。<br>
+        また、当サイトはアフィリエイトプログラムに参加しており、リンク先の商品購入により報酬を得ることがあります。<br>
+        広告やアフィリエイトにより収集される情報は、各サービス提供者のプライバシーポリシーに従います。
+      </li>
+      <li>
+        <strong>クッキーについて</strong><br>
+        当サイトでは、広告表示やアクセス解析のためにクッキーを利用する場合があります。<br>
+        ブラウザ設定によりクッキーを無効化することも可能です。
+      </li>
+      <li>
+        <strong>改定について</strong><br>
+        本ポリシーは随時改定する場合があります。<br>
+        改定後は当サイト上に掲載します。
+      </li>
+    </ol>
+    <p><strong>【お問い合わせ】</strong><br>coffeegeek0809@gmail.com</p>
+  </div>
+</div>
+
+<script>
+  const modal = document.getElementById('privacy-modal');
+  document.getElementById('privacy-link').onclick = () => {
+    modal.style.display = 'flex';
+  }
+  document.getElementById('close-modal').onclick = () => {
+    modal.style.display = 'none';
+  }
+  window.onclick = (e) => {
+    if(e.target == modal) modal.style.display = 'none';
+  }
+</script>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
