@@ -4,8 +4,20 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="自家焙煎コーヒーの焙煎記録を簡単に管理できるWebアプリ。豆の名前、投入温度、焙煎度、タイマー、温度グラフなどを記録し、過去の焙煎履歴と比較可能。初心者から上級者まで活用できます。">
+<meta name="description" content="コーヒーの自家焙煎記録を簡単に管理できるWebアプリ。豆の名前、投入温度、焙煎度、焙煎時間、温度などを記録し、過去履歴との比較も可能。初心者から上級者まで活用できます。">
 <meta name="google-site-verification" content="WMKe6AXTNIt68ZNNmp6N-2vqhp67ctHeAnzF1iAWikc" />
+
+<meta property="og:title" content="自家焙煎コーヒー記録管理 | COFFEE ROASTING LOG">
+<meta property="og:description" content="焙煎記録を管理・可視化できるWebアプリ">
+<meta property="og:image" content="https://coffee-roasting-log.netlify.app/サムネイル - 自家焙煎ログ管理.png">
+<meta property="og:url" content="https://coffee-roasting-log.netlify.app/">
+<meta property="og:type" content="website">
+
+<!-- Twitter 用（推奨） -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="自家焙煎コーヒー記録管理 | COFFEE ROASTING LOG">
+<meta name="twitter:description" content="焙煎記録を管理・可視化できるWebアプリ">
+<meta name="twitter:image" content="https://coffee-roasting-log.netlify.app/サムネイル - 自家焙煎ログ管理.png">
 
   <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-W4CTH82QBD"></script>
@@ -747,6 +759,14 @@ document.getElementById("editSave").addEventListener("click", ()=> {
       });
     }
 
+    // 秒 → mm:ss に変換
+    const formatTime = (seconds) => {
+        const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+        const s = Math.floor(seconds % 60).toString().padStart(2, '0');
+        return `${m}:${s}`;
+    };
+
+
     let annotations={};
     firstCrackTimes.forEach((t,i)=>{ annotations['f'+i]={type:'line', scaleID:'x', value:t, borderColor:'green', borderWidth:2,label:{display:true, content:'1ハゼ', color:'#fff', backgroundColor:'green', position:'start', rotation:0}}; });
     secondCrackTimes.forEach((t,i)=>{ annotations['s'+i]={type:'line', scaleID:'x', value:t, borderColor:'blue', borderWidth:2,label:{display:true, content:'2ハゼ', color:'#fff', backgroundColor:'blue', position:'start', rotation:0}}; });
@@ -761,8 +781,23 @@ document.getElementById("editSave").addEventListener("click", ()=> {
       type:'line',
       data:{datasets},
       options:{
-        scales:{ x:{ type:'linear', title:{display:true,text:'時間'} }, y:{ title:{display:true,text:'温度(℃)'} } },
-        plugins:{ legend:{ display:true }, annotation:{ annotations } }
+        scales:{ x:{ type:'linear', title:{display:true,text:'時間'}, 
+        ticks: {
+          callback: function(value) {
+              return formatTime(value); // x軸ラベルをmm:ss表示
+          }
+        } }, 
+        y:{ title:{display:true,text:'温度(℃)'} } },
+        plugins:{ legend:{ display:true },
+        tooltip: {
+            callbacks: {
+                label: function(context) {
+                    const time = formatTime(context.parsed.x); // mm:ss 表示
+                    return `${context.dataset.label}: ${context.parsed.y}℃ / ${time}`;
+                }
+            }
+        },
+        annotation:{ annotations } }
       }
     });
   }
