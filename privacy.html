@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>プライバシーポリシー</title>
+<style>
+body { 
+  font-family: sans-serif; 
+  margin:0; 
+  padding:0; 
+  background:#f3ebe0; 
+  display:flex; 
+  flex-direction:column; 
+  align-items:center;
+  box-sizing: border-box; 
+  overflow-x: hidden; /* 横スクロール防止 */
+}
+header {
+  display: flex;
+  align-items: center;
+  position: relative;
+  justify-content: space-between;
+  width: 100%;
+  background: #e8d6c3;
+  color: #4b3f36;
+  padding: 20px;
+  font-weight: bold;
+  box-sizing: border-box;
+}
+.logo {
+  font-size: 1.5em;
+  font-weight: bold;
+  padding-left: 0.3em;
+  padding-right: 0.3em;
+  box-sizing: border-box;
+  flex: 1;
+  text-align: center;
+}
+.logo-ja {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: medium;
+  font-weight: 700;
+  letter-spacing: 2px;
+  padding-bottom: 0.2em;
+}
+.logo-en {
+  font-family: 'Montserrat', sans-serif;
+  font-size: small;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: #4b3621;
+}
+.spacer {
+  width: 40px; 
+}
+
+/* ハンバーガーボタン */
+.menu-toggle {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  gap: 5px;
+  z-index: 1001;
+}
+.menu-toggle span {
+  display: block;
+  width: 25px;
+  height: 3px;
+  background: #4b3f36;
+  transition: 0.3s;
+}
+
+/* メニュー（サイドバー） */
+nav {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 250px;
+  height: 100%;
+  background: #f3ebe0;
+  box-shadow: -2px 0 8px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  padding: 60px 20px;
+  transform: translateX(100%); /* 初期状態は右に隠す */
+  transition: right 0.3s ease;
+  z-index: 1000;
+}
+nav.active {
+  transform: translateX(0); /* 表示状態は元の位置 */
+}
+nav a {
+  color: #4b3621;
+  text-align: left;
+  font-size: 1em;
+  text-decoration: none;
+  padding: 10px 0;
+}
+nav a:hover {
+  text-decoration: underline;
+}
+
+/* ハンバーガーを×にする */
+.menu-toggle.open span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+.menu-toggle.open span:nth-child(2) {
+  opacity: 0;
+}
+.menu-toggle.open span:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
+}
+
+/* 見出し */
+h1 {
+  font-size: x-large;
+  color:#5a3e2b;
+  text-align: center;
+}
+h2 {
+  font-size: large;
+  color:#5a3e2b;
+  text-align:left;
+  border-left:4px solid #5a3e2b;
+  padding-left: 0.5em;
+  margin: 0.5em 0;
+}
+
+p { 
+  font-size: 1em; line-height:1.6; margin-top: 1em; color:#4b3f36; 
+}
+
+footer { 
+  font-family: sans-serif;
+  width: 100%;
+  text-align:center; 
+  padding:20px; 
+  background:#e8d6c3;
+  font-size: small; 
+  color:#4b3f36;
+  box-sizing: border-box;
+}
+footer a { 
+  color:#6b4f3c; 
+  text-decoration:none; 
+  font-weight:500;
+  padding: 20px; 
+}
+footer a:hover {
+  text-decoration:underline; 
+}
+footer p {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  margin: 0;  
+}
+footer div {
+  display: flex;
+  justify-content: center;
+}
+.container { 
+  font-weight: normal; 
+  max-width:900px; 
+  width:95%; 
+  padding:20px; 
+  background:#fff8f0; 
+  margin:20px auto; 
+  border-radius:10px; 
+  box-shadow:0 0 10px rgba(0,0,0,0.1); 
+  box-sizing: border-box;
+}
+</style>
+
+<!-- adsenseコード--> 
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6466859230595575"
+     crossorigin="anonymous"></script>
+<!--googlefont-->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@700&family=Montserrat:wght@600&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+  <header>
+    <div class="spacer"></div>
+    <div class="logo">
+      <div class="logo-ja">自家焙煎コーヒー記録管理</div>
+      <div class="logo-en">COFFEE ROASTING LOG</div>
+    </div>
+    <div class="menu-toggle" id="menu-toggle">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </header>
+
+  <!-- サイドバー -->
+  <nav id="nav">
+    <a href="/">ホーム</a>
+    <a href="/howtouse.html">サイトの利用方法</a>
+    <a>問い合わせ</a>
+    <a href="/privacy.html">プライバシーポリシー</a>
+  </nav>
+
+  <div class="container">
+    <h1>プライバシーポリシー</h1>
+    <p>本サイトでは、利用者のプライバシーを尊重し、個人情報を適切に取り扱います。以下に、本サイトにおける情報の収集・利用に関する方針を示します。</p>
+    <h2>1. 情報の取得について</h2>
+    <p>本サイトでは、以下の目的でCookieやアクセスデータを利用する場合があります。<br>
+    ・サイト利用状況の解析<br>
+    ・広告配信の最適化<br>
+    ・アフィリエイトプログラムに基づく紹介</p>
+    <h2>2. アクセス解析ツールについて</h2>
+    <p>本サイトでは「Google Analytics 4」を利用しています。<br>
+    Google AnalyticsはCookieを利用して匿名のトラフィックデータを収集しますが、個人を特定する情報は含まれません。<br>
+    収集されたデータはGoogle社のプライバシーポリシーに基づいて管理されます。<br>
+    詳細は <a href="https://policies.google.com/privacy" target="_blank">Googleのプライバシーポリシー</a> をご参照ください。</p>
+    <h2>3. 広告配信について</h2>
+    <p>本サイトでは「Google AdSense」を利用しています。<br>
+    GoogleはCookieを使用してユーザーに適切な広告を表示することがあり、収集された情報はGoogle社のプライバシーポリシーに基づいて管理されます。<br>
+    ユーザーは以下のページからパーソナライズ広告を無効化できます：
+    <a href="https://www.google.com/settings/ads" target="_blank">広告設定ページ</a></p>
+    <h2>4. アフィリエイトプログラムについて</h2>
+    <p>当サイトは、Amazon.co.jpを宣伝しリンクすることによって紹介料を獲得できるアフィリエイトプログラムである「Amazonアソシエイト・プログラム」の参加者です。</p>
+    <h2>5. Cookieの利用について</h2>
+    <p>本サイトでは、広告配信やアクセス解析のためにCookieを使用する場合があります。ユーザーはブラウザの設定によりCookieを無効化することが可能です。ただし、一部機能が正しく動作しない場合があります。</p>
+    <h2>6. 免責事項</h2>
+    <p>当サイトは商用・私用を問わず、どなたでもご自由にお使いいただけます。ただし、当サイトによって生じた損害等の一切の責任を負いかねますので自己責任での利用をお願いいたします。</p>
+    <h2>7. プライバシーポリシーの改定について</h2>
+    <p>本ポリシーの内容は予告なく変更される場合があります。変更後の内容は本ページに掲載された時点で効力を発生するものとします。</p>
+  </div>
+
+  <footer>
+    <div id="footer-guide">
+      <a href="/">ホーム</a>
+      <p> | </p>
+      <a href="/howtouse.html">サイトの利用方法</a>
+      <p> | </p>
+      <a href="/privacy.html">プライバシー</a>
+    </div>
+  </footer>
+
+  <script>
+    const toggle = document.getElementById("menu-toggle");
+    const nav = document.getElementById("nav");
+
+    toggle.addEventListener("click", () => {
+      nav.classList.toggle("active"); // サイドバー表示
+      toggle.classList.toggle("open"); // ハンバーガーを×に
+    });
+  </script>
+
+</body>
+</html>

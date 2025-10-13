@@ -31,26 +31,161 @@
 
 <title>自家焙煎コーヒー記録管理 | COFFEE ROASTING LOG</title>
 <style>
-body { font-family: sans-serif; margin:0; padding:0; background:#f3ebe0; display:flex; flex-direction:column; align-items:center; }
+header {
+  display: flex;
+  align-items: center;
+  position: relative;
+  justify-content: space-between;
+  width: 100%;
+  background: #e8d6c3;
+  color: #4b3f36;
+  padding: 20px;
+  font-weight: bold;
+  box-sizing: border-box;
+}
+/* sidebar */
+.logo {
+  font-size: 1.5em;
+  font-weight: bold;
+  padding-left: 0.3em;
+  padding-right: 0.3em;
+  box-sizing: border-box;
+  flex: 1;
+  text-align: center;
+}
+.logo-ja {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: medium;
+  font-weight: 700;
+  letter-spacing: 2px;
+  padding-bottom: 0.2em;
+}
+.logo-en {
+  font-family: 'Montserrat', sans-serif;
+  font-size: small;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: #4b3621;
+}
+.spacer {
+  width: 40px; 
+}
+
+/* ハンバーガーボタン */
+.menu-toggle {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  gap: 5px;
+  z-index: 1001;
+}
+.menu-toggle span {
+  display: block;
+  width: 25px;
+  height: 3px;
+  background: #4b3f36;
+  transition: 0.3s;
+}
+
+/* メニュー（サイドバー） */
+nav {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 250px;
+  height: 100%;
+  background: #f3ebe0;
+  box-shadow: -2px 0 8px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  padding: 60px 20px;
+  transform: translateX(100%); /* 初期状態は右に隠す */
+  transition: right 0.3s ease;
+  z-index: 1000;
+}
+nav.active {
+  transform: translateX(0); /* 表示状態は元の位置 */
+}
+nav a {
+  color: #4b3621;
+  text-align: left;
+  font-size: 1em;
+  text-decoration: none;
+  padding: 10px 0;
+}
+nav a:hover {
+  text-decoration: underline;
+}
+
+/* ハンバーガーを×にする */
+.menu-toggle.open span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+.menu-toggle.open span:nth-child(2) {
+  opacity: 0;
+}
+.menu-toggle.open span:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
+}
+
+body { 
+  font-family: sans-serif; margin:0; padding:0; background:#f3ebe0; display:flex; flex-direction:column; align-items:center; box-sizing: border-box; 
+}
 footer { 
   font-family: sans-serif;
   width: 100%;
   text-align:center; 
   padding:20px; 
   background:#e8d6c3; /* 背景色を少し濃くしてフッター感 */
-  font-size:10px; 
+  font-size:small; 
   color:#4b3f36;
+  box-sizing: border-box;
 }
 footer a { 
   color:#6b4f3c; 
   text-decoration:none; 
   font-weight:500;
+  padding: 20px; 
+  margin-bottom: 1em;
 }
-footer a:hover { text-decoration:underline; }
-.container { max-width:900px; width:95%; padding:20px; background:#fff8f0; margin:20px auto; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.1);}
-h1,h3 { color:#5a3e2b; text-align:center; }
-label { font-weight:bold; color:#5a3e2b; display:flex; flex-direction:column; }
-input, button, textarea, select { margin:5px 0; padding:8px; width: 100%; box-sizing: border-box; border-radius:5px; border:1px solid #ccc; }
+footer a:hover {
+  text-decoration:underline; 
+}
+footer p { 
+  color:#6b4f3c; 
+  text-decoration:none; 
+  font-weight:500;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  margin-top: 0; 
+  margin-bottom: 1em;
+}
+footer div {
+display: flex;
+text-align: center;
+justify-content: center;
+}
+.container { 
+  max-width:900px; width:95%; padding:20px; background:#fff8f0; margin:20px auto; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+h3 { 
+  width: auto;
+  color:#5a3e2b; 
+  text-align:left; 
+  border-left: 4px solid #4b3f36; 
+  background-color: #d9d0ca;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  padding-left: 0.5em;
+  box-sizing: border-box; 
+}
+label { 
+  font-weight:bold; color:#5a3e2b; display:flex; flex-direction:column; 
+}
+input, button, textarea, select { 
+  margin:5px 0; padding:8px; width: 100%; box-sizing: border-box; border-radius:5px; border:1px solid #ccc; 
+}
+
 /* 日付入力欄の高さと背景色を統一 */
 input[type="date"] {
   -webkit-appearance: none;
@@ -79,7 +214,7 @@ input[type="date"]::-webkit-clear-button {
 
 textarea { height:50px; }
 #timerDisplay { font-size:2em; font-weight:bold; margin: 10px 0; text-align:center; color:#d2691e; }
-button { cursor:pointer; background:#8b4513; color:white; border:none; border-radius:5px; }
+button { cursor:pointer; background:#8b4513; color:white; border:none; border-radius:5px; font-weight:bold; }
 button:hover { background:#a0522d; }
 #roastForm { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
 #roastForm label { flex:1 1 45%; min-width:200px; }
@@ -120,14 +255,14 @@ tr:hover { background-color: #f0e6dc; cursor:pointer; }
 #button { display: flex; flex-wrap: wrap; gap: 10pt; justify-content: flex-end; }
 #filterBtn, #exportCsvBtn, #addTempBtn { width: 70pt; font-size: x-small; }
 
-.table-container { display: flex; justify-content: center; overflow-x: auto; }
+.table-container { width: 100%; box-sizing: border-box; display: flex; justify-content: center; overflow-x: auto;}
 #historyTable {
     border-collapse: collapse;
-    width: auto;
+    width: 100%;
+    box-sizing: border-box;
     background: #fff8f0;
-    font-size: small;
 }
-#historyTable thead { background-color: #d6bfae; color: #5a3e2b; }
+#historyTable thead { background-color: #d9d0ca; color: #5a3e2b; }
 #historyTable th {text-align: center; padding: 5px; border: 1px solid #ccc;
 } 
 #historyTable td { text-align: left; padding: 5px; border: 1px solid #ccc; }
@@ -169,8 +304,9 @@ tr:hover { background-color: #f0e6dc; cursor:pointer; }
 
 /* モーダル */
 .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5); }
-.modal-content { background-color: #fff8f0; margin: 6% auto; padding: 20px; border-radius: 10px; width: 90%; max-width: 600px; box-shadow: 0 0 10px rgba(0,0,0,0.3); }
+.modal-content { background-color: #fff8f0; margin: 20% auto; padding: 20px; border-radius: 10px; width: 90%; max-width: 600px;box-sizing: border-box; box-shadow: 0 0 10px rgba(0,0,0,0.3); }
 .modal-content p { white-space: pre-wrap; word-wrap: break-word; }
+.modal-content h2 {color: #5a3e2b; font-size:large;}
 .modal-title { font-weight: bold; font-size: 1.1em; margin-bottom: 10px; color: #5a3e2b; }
 .close { color: #aaa; float: right; font-size: 24px; font-weight: bold; cursor: pointer; }
 .close:hover { color: #000; }
@@ -178,55 +314,6 @@ tr:hover { background-color: #f0e6dc; cursor:pointer; }
 .form-row { display:flex; gap:8px; align-items:center; margin-bottom:8px; }
 .form-row label { flex:1; font-weight:normal; }
 .form-row input, .form-row textarea { flex:2; }
-
-  /* PRIVACY POLICY モーダルスタイル */
-  #privacy-modal {
-    display:none;
-    position:fixed;
-    top:0; left:0;
-    width:100%; height:100%;
-    background:rgba(0,0,0,0.3); /* 少し透過弱め */
-    justify-content:center;
-    align-items:center;
-    z-index:1000;
-  }
-  #privacy-modal .modal-content {
-    background:#fdf6f0; /* サイトの柔らかいベージュ系に統一 */
-    padding:25px 30px;
-    max-width:600px;
-    max-height:80%;
-    overflow:auto;
-    border-radius:15px; /* 角丸を大きめに */
-    position:relative;
-    box-shadow:0 6px 20px rgba(0,0,0,0.25); /* 軽い影で浮かせる */
-  }
-  #privacy-modal .close {
-    position:absolute;
-    top:12px; right:18px;
-    cursor:pointer;
-    font-weight:bold;
-    font-size:20px;
-    color:#4b3f36;
-  }
-  #privacy-modal h2 { 
-    margin-top:0; 
-    color:#6b4f3c;
-    font-size:22px;
-    text-align:center;
-  }
-    #privacy-modal p { 
-    margin-bottom:12px; 
-    line-height:1.6; 
-    font-size:15px;
-    text-align:center; /* センター寄せ */
-  }
-  #privacy-modal li { 
-    margin-bottom:12px; 
-    line-height:1.6; 
-    font-size:15px;
-  }
-  #privacy-modal ol { padding-left:20px; margin:0; }
-
 
 /* 小型スマホ用 */
 @media (max-width: 480px) {
@@ -265,8 +352,26 @@ tr:hover { background-color: #f0e6dc; cursor:pointer; }
 
 </head>
 <body>
+  <header>
+    <div class="spacer"></div>
+    <div class="logo">
+      <div class="logo-ja">自家焙煎コーヒー記録管理</div>
+      <div class="logo-en">COFFEE ROASTING LOG</div>
+    </div>
+    <div class="menu-toggle" id="menu-toggle">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </header>
+  <!-- サイドバー -->
+  <nav id="nav">
+    <a href="/">ホーム</a>
+    <a href="/howtouse.html">サイトの利用方法</a>
+    <a>問い合わせ</a>
+    <a href="/privacy.html">プライバシーポリシー</a>
+  </nav>
 <div class="container">
-<h1>COFFEE ROASTING LOG</h1>
 
 <h3>基本情報</h3>
 <div id="roastForm">
@@ -372,58 +477,42 @@ tr:hover { background-color: #f0e6dc; cursor:pointer; }
   </div>
 </div>
 
+<!-- 温度入力モーダル（既存モーダルと同じデザイン） -->
+<div id="tempInputModal" class="modal">
+  <div class="modal-content">
+    <span id="tempInputClose" class="close">&times;</span>
+    <h2 id="tempInputTitle">温度入力</h2>
+    <input type="number" id="tempInputValue" placeholder="℃" style="width:100%; margin-top:10px; margin-bottom:10px;">
+    <div style="text-align:right;">
+      <button id="tempInputOK">OK</button>
+      <button id="tempInputCancel">キャンセル</button>
+    </div>
+  </div>
+</div>
+
+
+
 </div>
 
 <!-- フッター -->
 <footer>
-  <a id="privacy-link">プライバシーポリシー</a>
+  <div id="footer-guide">
+  <a id="home-link" href="/">ホーム</a>
+  <p> | </p>
+  <a id="howtouse-link" href="/howtouse.html">サイトの利用方法</a>
+  <p> | </p>
+  <a id="privacy-link" href="/privacy.html">プライバシー</a>
+  </div>
 </footer>
 
-<!-- モーダル -->
-<div id="privacy-modal">
-  <div class="modal-content">
-    <span class="close" id="close-modal">×</span>
-    <h2>プライバシーポリシー</h2>
-    <p>当サイト「Coffee Roasting Log」（以下「当サイト」）では、ユーザーのプライバシーを尊重し、以下の方針に基づき運営しています。</p>
-    <ol>
-      <li>
-        <strong>データの保存について</strong><br>
-        当サイトでユーザーが入力する焙煎記録などのデータは、ブラウザの localStorage に保存され、サーバーには送信されません。<br>
-        そのため、当サイト側で個人情報や記録を管理・収集することはありません。
-      </li>
-      <li>
-        <strong>広告・アフィリエイトについて</strong><br>
-        当サイトでは Google AdSense 等の広告サービスを利用しています。<br>
-        広告配信事業者は Cookie 等を利用して、ユーザーの興味に基づいた広告を表示する場合があります。<br>
-        また、当サイトはアフィリエイトプログラムに参加しており、リンク先の商品購入により報酬を得ることがあります。<br>
-        広告やアフィリエイトにより収集される情報は、各サービス提供者のプライバシーポリシーに従います。
-      </li>
-      <li>
-        <strong>クッキーについて</strong><br>
-        当サイトでは、広告表示やアクセス解析のためにクッキーを利用する場合があります。<br>
-        ブラウザ設定によりクッキーを無効化することも可能です。
-      </li>
-      <li>
-        <strong>改定について</strong><br>
-        本ポリシーは随時改定する場合があります。<br>
-        改定後は当サイト上に掲載します。
-      </li>
-    </ol>
-    <p><strong>【お問い合わせ】</strong><br>coffeegeek0809@gmail.com</p>
-  </div>
-</div>
-
 <script>
-  const modal = document.getElementById('privacy-modal');
-  document.getElementById('privacy-link').onclick = () => {
-    modal.style.display = 'flex';
-  }
-  document.getElementById('close-modal').onclick = () => {
-    modal.style.display = 'none';
-  }
-  window.onclick = (e) => {
-    if(e.target == modal) modal.style.display = 'none';
-  }
+  const toggle = document.getElementById("menu-toggle");
+  const nav = document.getElementById("nav");
+
+  toggle.addEventListener("click", () => {
+    nav.classList.toggle("active"); // サイドバー表示
+    toggle.classList.toggle("open"); // ハンバーガーを×に
+  });
 </script>
 
 <script>
@@ -706,10 +795,31 @@ document.getElementById("editSave").addEventListener("click", ()=> {
   }
   function pauseTimer(){ clearInterval(timerInterval); timerInterval=null; }
   function resetTimer(){ clearInterval(timerInterval); roastTimer=0; temperatureLog=[]; firstCrackTimes=[]; secondCrackTimes=[]; roastEndTime=null; displayTimer(0); updateTempLogDisplay(); updateChart(); }
-  function endTimer(){ pauseTimer(); roastEndTime=roastTimer; const temp=parseFloat(prompt("終了時の温度(℃)を入力してください","")); if(!isNaN(temp)) temperatureLog.push({time:roastTimer,temp,label:"終了"}); updateTempLogDisplay(); updateChart(); }
-  function markFirstCrack(){ const temp=parseFloat(prompt("1ハゼ時の温度(℃)を入力してください","")); if(!isNaN(temp)) temperatureLog.push({time:roastTimer,temp,label:"1ハゼ"}); firstCrackTimes.push(roastTimer); updateTempLogDisplay(); updateChart(); }
-  function markSecondCrack(){ const temp=parseFloat(prompt("2ハゼ時の温度(℃)を入力してください","")); if(!isNaN(temp)) temperatureLog.push({time:roastTimer,temp,label:"2ハゼ"}); secondCrackTimes.push(roastTimer); updateTempLogDisplay(); updateChart(); }
-
+  function markFirstCrack(){
+  openTempInputModal("■ 1ハゼ時の温度を入力してください", (tempVal)=>{
+    temperatureLog.push({time:roastTimer,temp:tempVal,label:"1ハゼ"});
+    firstCrackTimes.push(roastTimer);
+    updateTempLogDisplay();
+    updateChart();
+  });
+}
+  function markSecondCrack(){
+  openTempInputModal("■ 2ハゼ時の温度を入力してください", (tempVal)=>{
+    temperatureLog.push({time:roastTimer,temp:tempVal,label:"2ハゼ"});
+    secondCrackTimes.push(roastTimer);
+    updateTempLogDisplay();
+    updateChart();
+  });
+}
+  function endTimer(){
+  pauseTimer();
+  roastEndTime = roastTimer;
+  openTempInputModal("■ 終了時の温度を入力してください", (tempVal)=>{
+    temperatureLog.push({time:roastTimer,temp:tempVal,label:"終了"});
+    updateTempLogDisplay();
+    updateChart();
+  });
+}
   function addTemperature() {
     const temp = parseFloat(document.getElementById("tempInput").value);
     if(!isNaN(temp)){
@@ -830,6 +940,43 @@ document.getElementById("editSave").addEventListener("click", ()=> {
     displayHistory();
     alert("保存しました");
   }
+
+  // 温度入力モーダル
+  let tempInputCallback = null; // OK押下時コールバック
+
+  function openTempInputModal(title, callback){
+    document.getElementById("tempInputTitle").innerText = title;
+    document.getElementById("tempInputValue").value = "";
+    tempInputCallback = callback;
+    document.getElementById("tempInputModal").style.display = "block";
+  }
+
+  // OK
+  document.getElementById("tempInputOK").addEventListener("click", ()=>{
+    const val = parseFloat(document.getElementById("tempInputValue").value);
+    document.getElementById("tempInputModal").style.display = "none";
+    if(!isNaN(val) && tempInputCallback) tempInputCallback(val);
+    tempInputCallback = null;
+  });
+
+  // キャンセル
+  document.getElementById("tempInputCancel").addEventListener("click", ()=>{
+    document.getElementById("tempInputModal").style.display = "none";
+    tempInputCallback = null;
+  });
+
+  // ×ボタン
+  document.getElementById("tempInputClose").addEventListener("click", ()=>{
+    document.getElementById("tempInputModal").style.display = "none";
+    tempInputCallback = null;
+  });
+
+  // モーダル背景クリックで閉じる
+  window.addEventListener("click", (event)=>{
+    const modal = document.getElementById("tempInputModal");
+    if(event.target === modal) modal.style.display = "none";
+  });
+
 
   // HTMLエスケープ（表示安全）
   function escapeHtml(str){
