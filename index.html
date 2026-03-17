@@ -13,1053 +13,2095 @@
 <meta property="og:url" content="https://coffee-roasting-log.netlify.app/">
 <meta property="og:type" content="website">
 
-<!-- Twitter 用（推奨） -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="自家焙煎コーヒー記録管理 | COFFEE ROASTING LOG">
 <meta name="twitter:description" content="焙煎記録を管理・可視化できるWebアプリ">
 <meta name="twitter:image" content="https://coffee-roasting-log.netlify.app/サムネイル - 自家焙煎ログ管理.png">
 
-  <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-W4CTH82QBD"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-W4CTH82QBD');
 </script>
 
 <title>自家焙煎コーヒー記録管理 | COFFEE ROASTING LOG</title>
 <style>
-header {
-  display: flex;
-  align-items: center;
-  position: relative;
-  justify-content: space-between;
-  width: 100%;
-  background: #e8d6c3;
-  color: #4b3f36;
-  padding: 20px;
-  font-weight: bold;
+* {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
-/* sidebar */
-.logo {
-  font-size: 1.5em;
-  font-weight: bold;
-  padding-left: 0.3em;
-  padding-right: 0.3em;
-  box-sizing: border-box;
+
+:root {
+  /* コーヒーテーマカラー */
+  --color-primary: #8B7355;
+  --color-primary-light: #A88B6F;
+  --color-primary-dark: #6B5744;
+  
+  --color-success: #9C8266;
+  --color-warning: #C8A882;
+  --color-danger: #A67C52;
+  
+  /* コーヒー色相 */
+  --color-coffee-darkest: #3E2C1F;
+  --color-coffee-dark: #5D4434;
+  --color-coffee-medium: #7D5E4A;
+  --color-coffee-light: #A8927B;
+  --color-cream: #FFF9F0;
+  --color-latte: #EBE0D3;
+  --color-latte-light: #F5EFE5;
+  
+  /* システムカラー */
+  --color-bg: #F5EFE5;
+  --color-bg-secondary: #FFF9F0;
+  --color-separator: rgba(93, 68, 52, 0.15);
+  --color-text-primary: #3E2C1F;
+  --color-text-secondary: #5D4434;
+  --color-text-tertiary: rgba(93, 68, 52, 0.5);
+  
+  /* シャドウ */
+  --shadow-sm: 0 1px 2px rgba(62, 44, 31, 0.08);
+  --shadow-md: 0 2px 8px rgba(62, 44, 31, 0.12);
+  --shadow-lg: 0 8px 16px rgba(62, 44, 31, 0.15);
+  
+  /* 角丸 */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  
+  /* スペーシング */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, 'Noto Sans JP', sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text-primary);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ナビゲーションバー */
+.nav-bar {
+  position: sticky;
+  top: 0;
+  background: var(--color-latte);
+  border-bottom: 0.5px solid var(--color-separator);
+  padding: var(--spacing-md);
+  z-index: 100;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.nav-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-brand {
   flex: 1;
   text-align: center;
 }
-.logo-ja {
-  font-family: 'Noto Sans JP', sans-serif;
-  font-size: medium;
+
+.nav-title {
+  font-size: 20px;
   font-weight: 700;
-  letter-spacing: 2px;
-  padding-bottom: 0.2em;
-}
-.logo-en {
-  font-family: 'Montserrat', sans-serif;
-  font-size: small;
-  font-weight: 600;
-  letter-spacing: 2px;
-  color: #4b3621;
-}
-.spacer {
-  width: 25px; 
+  color: var(--color-coffee-dark);
+  margin-bottom: 2px;
+  letter-spacing: 1px;
 }
 
-/* ハンバーガーボタン */
+.nav-subtitle {
+  font-size: 11px;
+  color: var(--color-coffee-medium);
+  font-weight: 600;
+  letter-spacing: 1.5px;
+}
+
+/* ハンバーガーメニュー */
 .menu-toggle {
   display: flex;
   flex-direction: column;
   cursor: pointer;
-  gap: 5px;
+  gap: 4px;
   z-index: 1001;
-}
-.menu-toggle span {
-  display: block;
-  width: 25px;
-  height: 3px;
-  background: #4b3f36;
-  transition: 0.3s;
+  padding: 8px;
 }
 
-/* メニュー（サイドバー） */
-nav {
+.menu-toggle span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--color-coffee-dark);
+  transition: 0.3s;
+  border-radius: 2px;
+}
+
+.menu-toggle.open span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.menu-toggle.open span:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-toggle.open span:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
+}
+
+.nav-spacer {
+  width: 38px;
+}
+
+/* サイドメニュー */
+.side-menu {
   position: fixed;
   top: 0;
   right: 0;
   width: 250px;
   height: 100%;
-  background: #f3ebe0;
-  box-shadow: -2px 0 8px rgba(0,0,0,0.2);
+  background: var(--color-bg-secondary);
+  box-shadow: -2px 0 8px rgba(62, 44, 31, 0.2);
   display: flex;
   flex-direction: column;
-  padding: 60px 20px;
-  transform: translateX(100%); /* 初期状態は右に隠す */
-  transition: right 0.3s ease;
+  padding: 60px 20px 20px;
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
   z-index: 1000;
 }
-nav.active {
-  transform: translateX(0); /* 表示状態は元の位置 */
+
+.side-menu.active {
+  transform: translateX(0);
 }
-nav a {
-  color: #4b3621;
+
+.side-menu-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 32px;
+  color: var(--color-coffee-dark);
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  line-height: 1;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.side-menu-close:hover {
+  color: var(--color-primary);
+}
+
+.side-menu a {
+  color: var(--color-coffee-dark);
   text-align: left;
-  font-size: 1em;
+  font-size: 16px;
   text-decoration: none;
-  padding: 10px 0;
+  padding: 12px 0;
+  border-bottom: 0.5px solid var(--color-separator);
+  font-weight: 500;
 }
-nav a:hover {
+
+.side-menu a:hover {
+  color: var(--color-primary);
+}
+
+/* メニュー背景オーバーレイ */
+.menu-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(62, 44, 31, 0.4);
+  z-index: 999;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+.menu-overlay.active {
+  display: block;
+}
+
+/* コンテンツエリア */
+.content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--spacing-md);
+  padding-bottom: calc(80px + var(--spacing-md));
+}
+
+/* カード */
+.card {
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-md);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.card-header {
+  padding: var(--spacing-md);
+  border-bottom: 0.5px solid var(--color-separator);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-title {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.card-body {
+  padding: var(--spacing-md);
+}
+
+/* ボタン */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 20px;
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-decoration: none;
+  gap: var(--spacing-xs);
+  white-space: nowrap;
+  height: 44px;
+  box-sizing: border-box;
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: var(--color-cream);
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+  opacity: 0.9;
+}
+
+.btn-secondary {
+  background: var(--color-primary);
+  color: var(--color-cream);
+}
+
+.btn-success {
+  background: var(--color-primary);
+  color: var(--color-cream);
+}
+
+.btn-block {
+  width: 100%;
+}
+
+.btn-sm {
+  padding: 8px 16px;
+  font-size: 14px;
+  height: 36px;
+}
+
+/* フォーム */
+.form-group {
+  margin-bottom: var(--spacing-md);
+}
+
+.form-label {
+  display: block;
+  font-size: 12px;
+  color: var(--color-text-tertiary);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  font-weight: 600;
+}
+
+.form-control {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--color-separator);
+  border-radius: var(--radius-sm);
+  font-size: 16px;
+  background: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  transition: border-color 0.2s;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+textarea.form-control {
+  resize: vertical;
+  min-height: 80px;
+  font-family: inherit;
+}
+
+input[type="date"].form-control {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* タイマー表示 */
+.timer-display {
+  background: linear-gradient(135deg, var(--color-coffee-medium), var(--color-coffee-darkest));
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  text-align: center;
+  margin-bottom: var(--spacing-md);
+  color: var(--color-cream);
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s ease;
+}
+
+.timer-value {
+  font-size: 48px;
+  font-weight: 300;
+  letter-spacing: 3px;
+  font-variant-numeric: tabular-nums;
+  margin-bottom: var(--spacing-sm);
+}
+
+.timer-controls {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-md);
+}
+
+/* フローティングタイマー */
+.timer-floating {
+  position: fixed;
+  bottom: calc(var(--spacing-md) + 60px);
+  right: var(--spacing-md);
+  z-index: 99;
+  width: 85px;
+  height: 85px;
+  background: linear-gradient(135deg, rgba(125, 94, 74, 0.95), rgba(62, 44, 31, 0.95));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(62, 44, 31, 0.4);
+  border-radius: 50%;
+  display: none !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 4px;
+  color: var(--color-cream);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  padding: 0 !important;
+  margin: 0 !important;
+  box-sizing: border-box;
+}
+
+.timer-floating.show {
+  display: flex !important;
+}
+
+.timer-floating:hover {
+  background: linear-gradient(135deg, rgba(125, 94, 74, 1), rgba(62, 44, 31, 1));
+  transform: scale(1.05);
+  box-shadow: 0 6px 24px rgba(62, 44, 31, 0.6);
+}
+
+.timer-floating * {
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.timer-floating .timer-value {
+  font-size: 18px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.5px !important;
+  font-variant-numeric: tabular-nums !important;
+  line-height: 1.2 !important;
+  display: block !important;
+  width: auto !important;
+  text-align: center !important;
+  color: var(--color-cream) !important;
+}
+
+.timer-floating .timer-label {
+  font-size: 9px !important;
+  opacity: 0.85 !important;
+  letter-spacing: 0.3px !important;
+  line-height: 1.2 !important;
+  white-space: nowrap !important;
+  display: block !important;
+  width: auto !important;
+  text-align: center !important;
+  color: var(--color-cream) !important;
+}
+
+.timer-display-wrapper {
+  transition: opacity 0.3s ease;
+}
+
+.timer-display-wrapper.floating-active {
+  opacity: 0.4;
+}
+
+@media (max-width: 767px) {
+  .timer-floating {
+    bottom: calc(var(--spacing-sm) + 100px);
+    right: var(--spacing-sm);
+    width: 75px;
+    height: 75px;
+    gap: 3px;
+  }
+  
+  .timer-floating .timer-value {
+    font-size: 16px !important;
+  }
+  
+  .timer-floating .timer-label {
+    font-size: 8px !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .timer-floating {
+    bottom: calc(var(--spacing-lg) + 80px);
+    right: var(--spacing-lg);
+    width: 95px;
+    height: 95px;
+    gap: 5px;
+  }
+  
+  .timer-floating .timer-value {
+    font-size: 20px !important;
+  }
+  
+  .timer-floating .timer-label {
+    font-size: 10px !important;
+  }
+}
+
+/* グラフ */
+.chart-wrapper {
+  position: relative;
+  height: 300px;
+  margin-bottom: var(--spacing-md);
+}
+
+#tempChart {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* 履歴リスト */
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.history-item {
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-md);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.history-item:hover {
+  background: var(--color-latte-light);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.history-item-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.history-item-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 4px;
+}
+
+.history-item-subtitle {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+.history-item-actions {
+  display: flex;
+  gap: var(--spacing-xs);
+  align-items: center;
+  margin-left: var(--spacing-md);
+}
+
+/* バッジ */
+.badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.badge-light {
+  background: var(--color-latte-light);
+  color: var(--color-coffee-dark);
+}
+
+.badge-medium {
+  background: var(--color-coffee-light);
+  color: var(--color-cream);
+}
+
+.badge-dark {
+  background: var(--color-coffee-darkest);
+  color: var(--color-cream);
+}
+
+/* アクションボタン */
+.favorite-btn {
+  font-size: 20px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--color-text-tertiary);
+  transition: all 0.2s;
+  padding: 4px;
+  line-height: 1;
+}
+
+.favorite-btn.active {
+  color: var(--color-warning);
+}
+
+.action-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.edit-btn {
+  background: var(--color-success);
+  color: var(--color-cream);
+}
+
+.delete-btn {
+  background: var(--color-danger);
+  color: var(--color-cream);
+}
+
+.action-btn:active {
+  transform: scale(0.95);
+}
+
+/* モーダル */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(62, 44, 31, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.modal-content {
+  background-color: var(--color-bg-secondary);
+  margin: 10% auto;
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  width: 90%;
+  max-width: 500px;
+  box-shadow: var(--shadow-lg);
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+}
+
+.modal-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-coffee-darkest);
+}
+
+.close {
+  color: var(--color-text-tertiary);
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  line-height: 1;
+  border: none;
+  background: none;
+  padding: 0;
+}
+
+.close:hover {
+  color: var(--color-text-primary);
+}
+
+.form-row {
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+}
+
+.form-row label {
+  flex: 1;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  font-size: 14px;
+}
+
+.form-row input,
+.form-row textarea,
+.form-row select {
+  flex: 2;
+}
+
+/* フィルター */
+.filters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-sm);
+}
+
+.filters-grid .form-group {
+  margin-bottom: 0;
+}
+
+.filters-grid .form-label {
+  font-size: 10px;
+  margin-bottom: 4px;
+}
+
+.filters-grid .form-control {
+  padding: 6px 8px;
+  font-size: 13px;
+  border-color: var(--color-latte);
+  background: var(--color-latte-light);
+}
+
+.filter-actions {
+  display: flex;
+  gap: var(--spacing-xs);
+  flex-wrap: wrap;
+  margin-top: var(--spacing-sm);
+}
+
+.filter-actions .btn {
+  flex: 1;
+  min-width: 100px;
+  padding: 8px 12px;
+  font-size: 13px;
+}
+
+/* 温度入力 */
+.temp-input-row {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+.temp-input-row .form-control {
+  flex: 1;
+}
+
+#tempLogDisplay {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  padding: var(--spacing-md);
+  background: var(--color-latte-light);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--spacing-md);
+  display: flex;
+  justify-content: space-around;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.temp-log-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.temp-log-label {
+  font-size: 11px;
+  color: var(--color-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+.temp-log-value {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-coffee-dark);
+  font-variant-numeric: tabular-nums;
+}
+
+#historyLabel {
+  font-size: 12px;
+  color: var(--color-text-tertiary);
+  margin-bottom: var(--spacing-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* タブバー */
+/* フッター */
+footer {
+  width: 100%;
+  text-align: center;
+  padding: var(--spacing-lg);
+  background: var(--color-latte);
+  font-size: 12px;
+  color: var(--color-coffee-dark);
+  margin-top: var(--spacing-xl);
+}
+
+footer a {
+  color: var(--color-coffee-medium);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0 var(--spacing-sm);
+}
+
+footer a:hover {
   text-decoration: underline;
 }
 
-/* ハンバーガーを×にする */
-.menu-toggle.open span:nth-child(1) {
-  transform: rotate(45deg) translate(5px, 5px);
-}
-.menu-toggle.open span:nth-child(2) {
-  opacity: 0;
-}
-.menu-toggle.open span:nth-child(3) {
-  transform: rotate(-45deg) translate(6px, -6px);
+.footer-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
 }
 
-body { 
-  font-family: sans-serif; margin:0; padding:0; background:#f3ebe0; display:flex; flex-direction:column; align-items:center; box-sizing: border-box; 
-}
-footer { 
-  font-family: sans-serif;
-  width: 100%;
-  text-align:center; 
-  padding:20px; 
-  background:#e8d6c3; /* 背景色を少し濃くしてフッター感 */
-  font-size:small; 
-  color:#4b3f36;
-  box-sizing: border-box;
-}
-footer a { 
-  color:#6b4f3c; 
-  text-decoration:none; 
-  font-weight:500;
-  padding: 20px; 
-  margin-bottom: 1em;
-}
-footer a:hover {
-  text-decoration:underline; 
-}
-footer p { 
-  color:#6b4f3c; 
-  text-decoration:none; 
-  font-weight:500;
-  padding-top: 20px;
-  padding-bottom: 20px;
-  margin-top: 0; 
-  margin-bottom: 1em;
-}
-footer div {
-display: flex;
-text-align: center;
-justify-content: center;
-}
-.container { 
-  max-width:900px; width:95%; padding:20px; background:#fff8f0; margin:20px auto; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.1);
-}
-h3 { 
-  width: auto;
-  color:#5a3e2b; 
-  text-align:left; 
-  border-left: 4px solid #4b3f36; 
-  background-color: #d9d0ca;
-  padding-top: 0.5em;
-  padding-bottom: 0.5em;
-  padding-left: 0.5em;
-  box-sizing: border-box; 
-}
-label { 
-  font-size: medium; font-weight:bold; color:#5a3e2b; display:flex; flex-direction:column; 
-}
-input, button, textarea, select { 
-  margin:5px 0; padding:8px; width: 100%; box-sizing: border-box; border-radius:5px; border:1px solid #ccc; 
+/* レスポンシブ */
+@media (min-width: 768px) {
+  .content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: var(--spacing-lg);
+    padding: var(--spacing-lg);
+  }
+
+  .timer-value {
+    font-size: 64px;
+  }
+
+  .timer-controls {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .chart-wrapper {
+    height: 350px;
+  }
 }
 
-/* 日付入力欄の高さと背景色を統一 */
-input[type="date"] {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 100%;
-  height: 32.67px;          /* 他の input と同じ高さに調整 */
-  background-color: #fff; /* 他の input と同じ背景色 */
-  border: 1px solid #ccc; 
-  border-radius: 5px;
-  box-sizing: border-box; 
-  font-size: 14px;        /* フォントサイズを他に合わせる */
-  color: #000;            /* テキスト色 */
-}
+@media (max-width: 767px) {
+  .button-group {
+    flex-direction: column;
+  }
 
-/* iOSで灰色になるフォントカラーを強制 */
-input[type="date"]::-webkit-datetime-edit {
-  color: #000; 
-}
-
-/* プレースホルダや矢印部分の調整 */
-input[type="date"]::-webkit-inner-spin-button,
-input[type="date"]::-webkit-clear-button {
-  -webkit-appearance: none;
-  display: none;
-}
-
-textarea { height:50px; }
-#timerDisplay { font-size:2em; font-weight:bold; margin: 10px 0; text-align:center; color:#d2691e; }
-button { cursor:pointer; background:#8b4513; color:white; border:none; border-radius:5px; font-weight:bold; }
-button:hover { background:#a0522d; }
-#roastForm { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
-#roastForm label { flex:1 1 45%; min-width:200px; }
-#timerControls { display:flex; flex-wrap:wrap; justify-content:center; gap:5px; margin-bottom:10px; }
-#timerControls button { flex: 1 1 40%; margin:5px; min-width:120px; padding:10px; }
-#filters {
-    display: flex;
-    gap: 10px 15px;
-    margin-bottom: 15px;
-    align-items: center;
-    justify-content: flex-end;
-    font-size: small;
-}
-#filters label {
-    display: flow;
-    align-items: center;
-    gap: 5px;
-    font-weight: bold;
-    color: #5a3e2b;
-}
-#filters select {
-    width: 55pt;
-    font-size: x-small;
-    text-align: left ;
-}
-table { border-collapse: collapse; width: 100%; margin-top:10px; overflow-x:auto; display:block; background:#fff8f0; }
-th, td { border: 1px solid #ccc; padding:5px; text-align: center; white-space: nowrap; }
-tr:hover { background-color: #f0e6dc; cursor:pointer; }
-.temp-chart-container { display: flex; justify-content: center;}
-#tempChart { width: 100%;  height:auto; margin-top:10px; background:white; padding:10px; border-radius:8px; box-shadow:0 0 5px #ccc; }
-#tempLogDisplay { margin-top:5px; font-size:0.9em; color:#5a3e2b; }
-
-.temp-input-container { display: flex; align-items: center; justify-content: flex-end; gap: 10px; margin-top: 10px; font-size: small; width: 100%;overflow: auto; white-space: nowrap; box-sizing: border-box; }
-.temp-input-container label { font-weight: bold; color: #5a3e2b; min-width: fit-content; text-align: center; }
-.temp-input-container input { width: fit-content; font-size: x-small; padding: 8px; border: 1px solid #ccc; border-radius: 6px; }
-.temp-input-container button { width: 150px; padding: 8px; background-color: #8B4513; color: white; border: none; border-radius: 6px; cursor: pointer; }
-
-#button { display: flex; flex-wrap: wrap; gap: 10pt; justify-content: flex-end; }
-#filterBtn, #exportCsvBtn, #addTempBtn { width: 70pt; }
-
-.table-container { width: 100%; box-sizing: border-box; display: flex; justify-content: center; overflow-x: auto;}
-#historyTable {
-    border-collapse: collapse;
+  .btn-block-mobile {
     width: 100%;
-    box-sizing: border-box;
-    background: #fff8f0;
-}
-#historyTable thead { background-color: #d9d0ca; color: #5a3e2b; }
-#historyTable th {text-align: center; padding: 10px; border: 1px solid #ccc;
-} 
-#historyTable td { text-align: left; padding: 5px; border: 1px solid #ccc; }
-
-/* コメント列は省略表示 */
-#historyTable th.comment-col,
-#historyTable td.comment-col {
-    max-width: 200px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    cursor: pointer;
+  }
 }
 
-/* お気に入りセル */
-#historyTable td.favorite-cell { font-size: 18px; color: goldenrod; cursor: pointer; text-align:center; }
-
-/* 編集/削除列（お気に入りの右隣） */
-#historyTable td.operation-col {
-    width: fit-content; /* 必要に応じて調整 */
-    white-space: nowrap;
-    text-align: center;
+/* ローディング */
+.loading {
+  display: none;
+  text-align: center;
+  padding: var(--spacing-lg);
+  color: var(--color-text-tertiary);
 }
 
-/* 編集・削除ボタンをアイコン形式で小さく */
-.edit-btn, .delete-btn {
-    display: inline-block;   /* 横並びにする */
-    width: 28px;
-    height: 28px;
-    margin: 0 2px;           /* 左右に少し余白 */
-    border-radius: 4px;
-    border: none;
-    cursor: pointer;
-    font-size: 14px;
-    line-height: 1;
-}
-.edit-btn { background:#4caf50; color:white; }
-.delete-btn { background:#d9534f; color:white; }
-
-/* モーダル */
-.modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5); }
-.modal-content { background-color: #fff8f0; margin: 20% auto; padding: 20px; border-radius: 10px; width: 90%; max-width: 600px;box-sizing: border-box; box-shadow: 0 0 10px rgba(0,0,0,0.3); }
-.modal-content p { white-space: pre-wrap; word-wrap: break-word; }
-.modal-content h2 {color: #5a3e2b; font-size:large;}
-.modal-title { font-weight: bold; font-size: 1.1em; margin-bottom: 10px; color: #5a3e2b; }
-.close { color: #aaa; float: right; font-size: 24px; font-weight: bold; cursor: pointer; }
-.close:hover { color: #000; }
-
-.form-row { display:flex; gap:8px; align-items:center; margin-bottom:8px; }
-.form-row label { flex:1; font-weight:normal; }
-.form-row input, .form-row textarea { flex:2; }
-
-/* 小型スマホ用 */
-@media (max-width: 480px) {
-  body { font-size: 14px; }
-  h1 { font-size: 1.5em; }
-  h3 { font-size: 1.2em; }
-
-  #roastForm label { flex: 1 1 100%; }
-  #timerControls button { min-width: 70px; font-size: 0.8em; padding: 6px; }
-  .temp-input-container { display: flex;  justify-content: flex-start; }
-  #button { justify-content: flex-end; }
-  #filters { display: flex; flex-direction: row; align-items: center; justify-content:flex-start; gap:10px; overflow-x: auto; white-space: nowrap; padding: 5px 0; box-sizing: border-box;}
-  #filters select { width: 50pt; }
-  .modal-content { width: 90%; max-width: 90%; }
-  .container { width: 85%; padding: 15px; }
+.loading.show {
+  display: block;
 }
 
-/* タブレット用 */
-@media (max-width: 768px) {
-  #roastForm label { flex: 1 1 100%; }
-  #timerControls button { min-width: 100px; }
-  .container { width: 90%; padding: 18px; }
-}
-
-
-
+/* ユーティリティ */
+.text-center { text-align: center; }
+.mt-lg { margin-top: var(--spacing-lg); }
+.mb-lg { margin-bottom: var(--spacing-lg); }
+.hidden { display: none; }
 </style>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6466859230595575"
-     crossorigin="anonymous"></script>
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 <link rel="manifest" href="/site.webmanifest">
-
 </head>
 <body>
-  <header>
-    <div class="spacer"></div>
-    <div class="logo">
-      <div class="logo-ja">自家焙煎コーヒー記録管理</div>
-      <div class="logo-en">COFFEE ROASTING LOG</div>
-    </div>
-    <div class="menu-toggle" id="menu-toggle">
+
+<div class="nav-bar">
+  <div class="nav-content">
+    <div class="nav-spacer"></div>
+    <a href="/" class="nav-brand" style="text-decoration: none; color: inherit; cursor: pointer;">
+      <div class="nav-title">自家焙煎コーヒー記録管理</div>
+      <div class="nav-subtitle">COFFEE ROASTING LOG</div>
+    </a>
+    <div class="menu-toggle" id="menuToggle">
       <span></span>
       <span></span>
       <span></span>
     </div>
-  </header>
-  <!-- サイドバー -->
-  <nav id="nav">
-    <a href="/">ホーム</a>
-    <a href="/howtouse.html">サイトの利用方法</a>
-    <a href="/inquiryform.html">お問い合わせ</a>
-    <a href="/privacy.html">プライバシーポリシー</a>
-  </nav>
-<div class="container">
-
-<h3>基本情報</h3>
-<div id="roastForm">
-  <label>豆の名前:<input id="beanName" type="text"></label>
-  <label>焙煎日:<input id="roastDate" type="date"></label>
-  <label>投入温度(℃):<input id="inputTemp" type="number"></label>
-  <label>焙煎前重量(g):<input id="preWeight" type="number"></label>
-  <label>焙煎後重量(g):<input id="postWeight" type="number" oninput="updateRoastLevel()"></label>
-  <label>焙煎度:<input id="roastLevel" type="text" readonly></label>
-  <label>コメント:<textarea id="comment"></textarea></label>
-</div>
-
-<h3>タイマー</h3>
-<div id="timerDisplay">00:00:00</div>
-<div id="timerControls">
-  <button id="startBtn">開始</button>
-  <button id="pauseBtn">一時停止</button>
-  <button id="firstCrackBtn">1ハゼ</button>
-  <button id="secondCrackBtn">2ハゼ</button>
-  <button id="resetBtn">リセット(タイマー/グラフ)</button>
-  <button id="endBtn">終了</button>
-  <button id="saveBtn">焙煎記録を保存する</button>
-</div>
-
-<div class="section">
-    <h3>温度管理</h3>
-    <div class="temp-input-container">
-      　<label id="historyLabel" >■ 履歴参照: なし</label>
-        <label for="tempInput">■ 温度:</label>
-        <input type="number" id="tempInput" placeholder="温度を入力してください">
-        <button id="addTempBtn">記録</button>
-    </div>
-<div id="tempLogDisplay"></div>
-<div class="temp-chart-container">
-<canvas id="tempChart"></canvas>
-</div>
-</div>
-
-<h3>焙煎記録</h3>
-<!-- 省略: 上部は現状コードと同じ -->
-<div id="button">
-    <button id="filterBtn">記録を表示</button>
-    <!-- CSV出力ボタン追加 -->
-    <button id="exportCsvBtn">CSV出力</button>
-</div>
-
-<div id="filters">
-  <label>豆：
-    <select id="filterBean"><option value="">ALL</option></select>
-  </label>
-  <label>焙煎年：
-    <select id="filterYear"><option value="">ALL</option></select>
-  </label>
-  <label>焙煎月：
-    <select id="filterMonth"><option value="">ALL</option></select>
-  </label>
-  <label>焙煎度：
-    <select id="filterLevel">
-      <option value="">ALL</option>
-      <option value="浅煎り">浅煎り</option>
-      <option value="中煎り">中煎り</option>
-      <option value="深煎り">深煎り</option>
-    </select>
-  </label>
-</div>
-
-<div class="table-container">
-  <table id="historyTable">
-    <thead>
-      <tr>
-        <th>お気に入り</th>
-        <th class="operation-col">編集/削除</th> <!-- ここを追加 -->
-        <th>豆</th><th>焙煎日</th><th>投入温度(℃)</th><th>焙煎前(g)</th><th>焙煎後(g)</th>
-        <th>焙煎度</th><th>1ハゼ</th><th>2ハゼ</th><th>所要時間</th><th class="comment-col">コメント(クリックで全体を表示)</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-</div>
-
-<!-- コメント表示用モーダル -->
-<div id="commentModal" class="modal">
-  <div class="modal-content">
-    <span class="close" id="closeCommentModal">&times;</span>
-    <div class="modal-title" id="modalTitle"></div>
-    <p id="modalText"></p>
   </div>
 </div>
 
-<!-- 編集用モーダル -->
+<!-- サイドメニュー -->
+<div class="menu-overlay" id="menuOverlay"></div>
+<nav class="side-menu" id="sideMenu">
+  <button class="side-menu-close" id="menuClose">&times;</button>
+  <a href="/">ホーム</a>
+  <a href="/howtouse.html">サイトの利用方法</a>
+  <a href="/inquiryform.html">お問い合わせ</a>
+  <a href="/privacy.html">プライバシーポリシー</a>
+</nav>
+
+<div class="content">
+  <div class="main-column">
+    
+    <!-- 焙煎情報 -->
+    <div class="card">
+      <div class="card-header" style="cursor: pointer;" id="roastInfoHeader">
+        <div class="card-title">焙煎情報</div>
+        <button class="btn btn-sm btn-primary" id="roastInfoToggle">焙煎情報を入力</button>
+      </div>
+      <div class="card-body" id="roastInfoBody" style="display: none;">
+        <div class="form-group">
+          <label class="form-label">豆の名前</label>
+          <input type="text" class="form-control" id="beanName" placeholder="例: エチオピア イルガチェフ">
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">焙煎日</label>
+          <input type="date" class="form-control" id="roastDate">
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-sm);">
+          <div class="form-group">
+            <label class="form-label">投入温度 (℃)</label>
+            <input type="number" class="form-control" id="inputTemp" placeholder="200">
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">焙煎前重量 (g)</label>
+            <input type="number" class="form-control" id="preWeight" placeholder="300">
+          </div>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-sm);">
+          <div class="form-group">
+            <label class="form-label">焙煎後重量 (g)</label>
+            <input type="number" class="form-control" id="postWeight" placeholder="255">
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">焙煎度</label>
+            <input type="text" class="form-control" id="roastLevel" readonly>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">コメント</label>
+          <textarea class="form-control" id="comment" placeholder="焙煎時の気づきやメモ"></textarea>
+        </div>
+        
+        <button class="btn btn-success btn-block mt-lg" id="saveBtn">焙煎記録を保存する</button>
+      </div>
+    </div>
+
+    <!-- タイマー -->
+    <div class="card timer-card" id="timerCard">
+      <div class="card-header">
+        <div class="card-title">タイマー</div>
+      </div>
+      <div class="card-body">
+        <div class="timer-display-wrapper" id="timerDisplayWrapper">
+          <div class="timer-display" id="timerDisplayElement">
+            <div class="timer-value" id="timerValue">00:00:00</div>
+            <div style="font-size: 13px; opacity: 0.9; text-transform: uppercase; letter-spacing: 1px;">焙煎時間</div>
+          </div>
+        </div>
+        <div class="timer-controls">
+          <button class="btn btn-sm btn-success" id="startBtn">開始</button>
+          <button class="btn btn-sm btn-secondary" id="pauseBtn">一時停止</button>
+          <button class="btn btn-sm btn-primary" id="firstCrackBtn">1ハゼ</button>
+          <button class="btn btn-sm btn-primary" id="secondCrackBtn">2ハゼ</button>
+          <button class="btn btn-sm btn-secondary" id="resetBtn">リセット</button>
+          <button class="btn btn-sm btn-primary" id="endBtn">終了</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- フローティングタイマー -->
+    <div class="timer-floating" id="floatingTimer">
+      <div class="timer-value" id="floatingTimerValue">00:00</div>
+      <div class="timer-label">焙煎中</div>
+    </div>
+
+    <!-- 温度グラフ -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">温度カーブ</div>
+      </div>
+      <div class="card-body">
+        <div id="historyLabel">履歴参照: なし</div>
+        
+        <!-- 温度入力欄 -->
+        <div class="temp-input-row">
+          <input type="number" class="form-control" id="tempInput" placeholder="温度 (℃)">
+          <button class="btn btn-primary" id="addTempBtn">記録</button>
+        </div>
+        
+        <!-- 1ハゼ/2ハゼ/終了時間表示 -->
+        <div id="tempLogDisplay">
+          <div class="temp-log-item">
+            <div class="temp-log-label">1ハゼ</div>
+            <div class="temp-log-value" id="firstCrackDisplay">--:--</div>
+          </div>
+          <div class="temp-log-item">
+            <div class="temp-log-label">2ハゼ</div>
+            <div class="temp-log-value" id="secondCrackDisplay">--:--</div>
+          </div>
+          <div class="temp-log-item">
+            <div class="temp-log-label">終了</div>
+            <div class="temp-log-value" id="endTimeDisplay">--:--</div>
+          </div>
+        </div>
+        
+        <!-- グラフ -->
+        <div class="chart-wrapper">
+          <canvas id="tempChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="side-column">
+    
+    <!-- 焙煎履歴（フィルター統合版） -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">焙煎履歴</div>
+      </div>
+      <div class="card-body">
+        <!-- フィルター -->
+        <div class="filters-grid">
+          <div class="form-group">
+            <label class="form-label">豆</label>
+            <select class="form-control" id="filterBean">
+              <option value="">すべて</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">年</label>
+            <select class="form-control" id="filterYear">
+              <option value="">すべて</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">月</label>
+            <select class="form-control" id="filterMonth">
+              <option value="">すべて</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">焙煎度</label>
+            <select class="form-control" id="filterLevel">
+              <option value="">すべて</option>
+              <option value="浅煎り">浅煎り</option>
+              <option value="中煎り">中煎り</option>
+              <option value="深煎り">深煎り</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="filter-actions">
+          <button class="btn btn-primary btn-sm" id="filterBtn">表示更新</button>
+          <button class="btn btn-secondary btn-sm" id="favoriteOnlyBtn">⭐のみ</button>
+          <button class="btn btn-secondary btn-sm" id="exportCsvBtn">CSV出力</button>
+        </div>
+
+        <div style="border-top: 0.5px solid var(--color-separator); margin: var(--spacing-md) 0;"></div>
+        
+        <div class="loading" id="historyLoading">読み込み中...</div>
+        <div class="history-list" id="historyList"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- モーダル -->
 <div id="editModal" class="modal">
   <div class="modal-content">
-    <span class="close" id="editClose">&times;</span>
-    <h3>焙煎記録の編集</h3>
-    <div class="form-row"><label>豆名</label><input id="editBean" type="text"></div>
-    <div class="form-row"><label>焙煎日</label><input id="editDate" type="date"></div>
-    <div class="form-row"><label>投入温度(℃)</label><input id="editTemp" type="number"></div>
-    <div class="form-row"><label>焙煎前(g)</label><input id="editPre" type="number" oninput="calcAndUpdateEditRoast()"></div>
-    <div class="form-row"><label>焙煎後(g)</label><input id="editPost" type="number" oninput="calcAndUpdateEditRoast()"></div>
-    <div class="form-row"><label>焙煎度</label><input id="editLevel" type="text" readonly></div>
-    <div class="form-row"><label>コメント</label><textarea id="editComment" rows="4"></textarea></div>
-    <div style="text-align:right;"><button id="editSave">保存</button></div>
+    <div class="modal-header">
+      <div class="modal-title">焙煎記録の編集</div>
+      <button class="close" id="editClose">&times;</button>
+    </div>
+    <div class="form-row"><label>豆名</label><input id="editBean" type="text" class="form-control"></div>
+    <div class="form-row"><label>焙煎日</label><input id="editDate" type="date" class="form-control"></div>
+    <div class="form-row"><label>投入温度(℃)</label><input id="editTemp" type="number" class="form-control"></div>
+    <div class="form-row"><label>焙煎前(g)</label><input id="editPre" type="number" class="form-control"></div>
+    <div class="form-row"><label>焙煎後(g)</label><input id="editPost" type="number" class="form-control"></div>
+    <div class="form-row"><label>焙煎度</label><input id="editLevel" type="text" class="form-control" readonly></div>
+    <div class="form-row"><label>コメント</label><textarea id="editComment" rows="4" class="form-control"></textarea></div>
+    <div style="text-align:right;"><button class="btn btn-success" id="editSave">保存</button></div>
   </div>
 </div>
 
-<!-- 温度入力モーダル（既存モーダルと同じデザイン） -->
 <div id="tempInputModal" class="modal">
   <div class="modal-content">
-    <span id="tempInputClose" class="close">&times;</span>
-    <h2 id="tempInputTitle">温度入力</h2>
-    <input type="number" id="tempInputValue" placeholder="℃" style="width:100%; margin-top:10px; margin-bottom:10px;">
-    <div style="text-align:right;">
-      <button id="tempInputOK">OK</button>
-      <button id="tempInputCancel">キャンセル</button>
+    <div class="modal-header">
+      <div class="modal-title" id="tempInputTitle">温度入力</div>
+      <button class="close" id="tempInputClose">&times;</button>
+    </div>
+    <div style="margin-bottom: var(--spacing-md);">
+      <input type="number" id="tempInputValue" class="form-control" placeholder="℃">
+    </div>
+    <div style="display: flex; gap: var(--spacing-sm);">
+      <button class="btn btn-secondary" id="tempInputCancel" style="flex: 1;">キャンセル</button>
+      <button class="btn btn-primary" id="tempInputOK" style="flex: 1;">OK</button>
     </div>
   </div>
 </div>
 
-
-
-</div>
-
-<!-- フッター -->
+<!-- タブバー -->
 <footer>
-  <div id="footer-guide">
-  <a id="home-link" href="/">ホーム</a>
-  <p> | </p>
-  <a id="howtouse-link" href="/howtouse.html">サイトの利用方法</a>
-  <p> | </p>
-  <a id="privacy-link" href="/privacy.html">プライバシー</a>
+  <div class="footer-links">
+    <a href="/">ホーム</a>
+    <span>|</span>
+    <a href="/howtouse.html">サイトの利用方法</a>
+    <span>|</span>
+    <a href="/inquiryform.html">お問い合わせ</a>
+    <span>|</span>
+    <a href="/privacy.html">プライバシーポリシー</a>
   </div>
+  <p style="margin-top: 12px;">&copy; 2025 自家焙煎コーヒー記録管理. All rights reserved.</p>
 </footer>
 
 <script>
-  const toggle = document.getElementById("menu-toggle");
-  const nav = document.getElementById("nav");
+// パフォーマンス最適化版
+(function() {
+  'use strict';
 
-  toggle.addEventListener("click", () => {
-    nav.classList.toggle("active"); // サイドバー表示
-    toggle.classList.toggle("open"); // ハンバーガーを×に
-  });
-</script>
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  let roastTimer=0, timerInterval=null;
-  let temperatureLog=[], firstCrackTimes=[], secondCrackTimes=[], roastEndTime=null;
-  let chart=null, historyLog=null;
-  let editingId = null; // 編集対象の id
-
-  function secToHMS(sec){ const h=Math.floor(sec/3600), m=Math.floor((sec%3600)/60), s=sec%60; return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`; }
-  function displayTimer(sec){ document.getElementById("timerDisplay").innerText = secToHMS(sec); }
-
-  window.updateRoastLevel = function(){
-    const pre=parseFloat(document.getElementById("preWeight").value);
-    const post=parseFloat(document.getElementById("postWeight").value);
-    if(pre>0 && post>0){
-      const index=pre/post;
-      let level="";
-      if(index<1.15) level="浅煎り";
-      else if(index<1.2) level="中煎り";
-      else level="深煎り";
-      document.getElementById("roastLevel").value=`${level}（${index.toFixed(3)}）`;
-    }
-  }
-
-  // --- data sanity: 不完全な既存ログを補完 ---
-  function ensureLogSanity(){
-    const logs = JSON.parse(localStorage.getItem("roastLogs"))||[];
-    let changed = false;
-    for(let i=0;i<logs.length;i++){
-      const l = logs[i];
-      if(!l.id){ l.id = Date.now().toString() + '-' + Math.random().toString(36).slice(2,8); changed = true; }
-      if(typeof l.favorite === 'undefined'){ l.favorite = false; changed = true; }
-      if(!Array.isArray(l.temperatureLog)) { l.temperatureLog = l.temperatureLog || []; changed = true; }
-      if(!Array.isArray(l.firstCrackTimes)) { l.firstCrackTimes = l.firstCrackTimes || []; changed = true; }
-      if(!Array.isArray(l.secondCrackTimes)) { l.secondCrackTimes = l.secondCrackTimes || []; changed = true; }
-      if(typeof l.roastEndTime === 'undefined') { l.roastEndTime = l.roastEndTime ?? null; changed = true; }
-    }
-    if(changed) localStorage.setItem("roastLogs", JSON.stringify(logs));
-  }
-
-  function populateFilterOptions(){
-    ensureLogSanity();
-    const logs=JSON.parse(localStorage.getItem("roastLogs"))||[];
-    const beanSet=new Set(), yearSet=new Set(), monthSet=new Set();
-    logs.forEach(log=>{
-      beanSet.add(log.beanName);
-      const d=new Date(log.roastDate);
-      if(!isNaN(d)) {
-        yearSet.add(d.getFullYear());
-        monthSet.add(d.getMonth()+1);
-      }
-    });
-    const beanSelect=document.getElementById("filterBean");
-    const yearSelect=document.getElementById("filterYear");
-    const monthSelect=document.getElementById("filterMonth");
-    // いったんリセットしてから追加（重複防止）
-    beanSelect.innerHTML = '<option value="">ALL</option>';
-    yearSelect.innerHTML = '<option value="">ALL</option>';
-    monthSelect.innerHTML = '<option value="">ALL</option>';
-    Array.from(beanSet).sort().forEach(b=>{
-      const opt=document.createElement("option");
-      opt.value=b; opt.text=b; beanSelect.add(opt);
-    });
-    Array.from(yearSet).sort().forEach(y=>{
-      const opt=document.createElement("option");
-      opt.value=y; opt.text=y; yearSelect.add(opt);
-    });
-    Array.from(monthSet).sort().forEach(m=>{
-      const opt=document.createElement("option");
-      opt.value=m; opt.text=m; monthSelect.add(opt);
-    });
-  }
-
-  // --- 表示（フィルタ適用） ---
-  function displayHistory(){
-    ensureLogSanity();
-    const tbody=document.querySelector("#historyTable tbody");
-    const logs=JSON.parse(localStorage.getItem("roastLogs"))||[];
-    const beanFilter=document.getElementById("filterBean").value;
-    const yearFilter=document.getElementById("filterYear").value;
-    const monthFilter=document.getElementById("filterMonth").value;
-    const levelFilter=document.getElementById("filterLevel").value;
-
-    const filteredLogs=logs.filter(log=>{
-      const d=new Date(log.roastDate);
-      const roastYear=d.getFullYear();
-      const roastMonth=d.getMonth()+1;
-      const roastLevel=log.roastLevel?log.roastLevel.split("（")[0]:"";
-      if(beanFilter && log.beanName!==beanFilter) return false;
-      if(yearFilter && roastYear!==parseInt(yearFilter)) return false;
-      if(monthFilter && roastMonth!==parseInt(monthFilter)) return false;
-      if(levelFilter && roastLevel!==levelFilter) return false;
-      return true;
-    });
-
-    tbody.innerHTML="";
-    filteredLogs.forEach((log)=>{
-      const tr=document.createElement("tr");
-      const star = log.favorite ? "★" : "☆";
-      tr.innerHTML=`
-        <td class="favorite-cell" data-id="${log.id}">${star}</td>
-        <td class="operation-col">
-          <button class="edit-btn" data-id="${log.id}" title="編集">✏</button>
-          <button class="delete-btn" data-id="${log.id}" title="削除">🗑</button>
-        </td>
-        <td>${log.beanName}</td>
-        <td>${log.roastDate}</td>
-        <td>${log.inputTemp ?? ''}</td>
-        <td>${log.preWeight ?? ''}</td>
-        <td>${log.postWeight ?? ''}</td>
-        <td>${log.roastLevel ?? ''}</td>
-        <td>${(log.firstCrackTimes||[]).map(secToHMS).join(', ')}</td>
-        <td>${(log.secondCrackTimes||[]).map(secToHMS).join(', ')}</td>
-        <td>${log.roastEndTime!==null && log.roastEndTime!==undefined?secToHMS(log.roastEndTime):''}</td>
-        <td class="comment-col">${log.comment ?? ''}</td>
-      `;
-      tr.addEventListener('click', ()=>{ historyLog = log; document.getElementById("historyLabel").innerText = "■ 履歴参照中: " + log.beanName + " / " + log.roastDate; updateChart(); });
-      tbody.appendChild(tr);
-    });
-
-    // --- attach events for newly created elements ---
-
-    // お気に入り切替
-    document.querySelectorAll(".favorite-cell").forEach(cell=>{
-      cell.addEventListener("click",(e)=>{
-        e.stopPropagation();
-        const id = cell.dataset.id;
-        const logsAll = JSON.parse(localStorage.getItem("roastLogs"))||[];
-        const idxAll = logsAll.findIndex(l=>l.id === id);
-        if(idxAll>=0){
-          logsAll[idxAll].favorite = !logsAll[idxAll].favorite;
-          localStorage.setItem("roastLogs", JSON.stringify(logsAll));
-          populateFilterOptions();
-          displayHistory();
-        }
-      });
-    });
-
-    // コメント列クリックでモーダル
-    document.querySelectorAll("#historyTable td.comment-col").forEach(td=>{
-      td.addEventListener("click",(e)=>{
-        e.stopPropagation();
-        const tr = td.parentElement;
-        const bean = tr.cells[2].innerText;
-        const date = tr.cells[3].innerText;
-        const level = tr.cells[7].innerText;
-        document.getElementById("modalText").innerText = td.innerText;
-        document.getElementById("modalTitle").innerText = `${bean} / ${date} / ${level}`;
-        document.getElementById("commentModal").style.display = "block";
-      });
-    });
-
-    // 編集ボタン
-    document.querySelectorAll(".edit-btn").forEach(btn=>{
-      btn.addEventListener("click",(e)=>{
-        e.stopPropagation();
-        const id = btn.dataset.id;
-        const logsAll = JSON.parse(localStorage.getItem("roastLogs"))||[];
-        const idxAll = logsAll.findIndex(l=>l.id === id);
-        if(idxAll<0) return;
-        const record = logsAll[idxAll];
-        editingId = id;
-        document.getElementById("editBean").value = record.beanName || "";
-        document.getElementById("editDate").value = record.roastDate || "";
-        document.getElementById("editTemp").value = record.inputTemp ?? "";
-        document.getElementById("editPre").value = record.preWeight ?? "";
-        document.getElementById("editPost").value = record.postWeight ?? "";
-        document.getElementById("editLevel").value = record.roastLevel || "";
-        document.getElementById("editComment").value = record.comment || "";
-        document.getElementById("editModal").style.display = "block";
-      });
-    });
-
-    // 削除ボタン
-    document.querySelectorAll(".delete-btn").forEach(btn=>{
-      btn.addEventListener("click",(e)=>{
-        e.stopPropagation();
-        const id = btn.dataset.id;
-        if(!confirm("この記録を削除しますか？")) return;
-        const logsAll = JSON.parse(localStorage.getItem("roastLogs"))||[];
-        const idxAll = logsAll.findIndex(l=>l.id === id);
-        if(idxAll>=0){
-          logsAll.splice(idxAll,1);
-          localStorage.setItem("roastLogs", JSON.stringify(logsAll));
-          populateFilterOptions();
-          displayHistory();
-        }
-      });
-    });
-
-  } // displayHistory end
-
-  // --- モーダル：閉じる（共通） ---
-  document.getElementById("closeCommentModal").addEventListener("click", ()=>{ document.getElementById("commentModal").style.display = "none"; });
-  document.getElementById("editClose").addEventListener("click", ()=>{ document.getElementById("editModal").style.display = "none"; });
-
-  // 背景クリックで閉じる（両モーダルに対応）
-  window.addEventListener("click", (event)=>{
-    const cm = document.getElementById("commentModal");
-    const em = document.getElementById("editModal");
-    if(event.target === cm) cm.style.display = "none";
-    if(event.target === em) em.style.display = "none";
-  });
-
-// 共通計算＆更新関数
-function calcAndUpdateEditRoast() {
-  const pre = parseFloat(document.getElementById("editPre").value);
-  const post = parseFloat(document.getElementById("editPost").value);
-
-  if(pre > 0 && post > 0){
-    const roastIndex = pre / post;
-    let roastLevel = "";
-    if(roastIndex < 1.15) roastLevel = "浅煎り";
-    else if(roastIndex < 1.2) roastLevel = "中煎り";
-    else roastLevel = "深煎り";
-
-    // モーダル表示用
-    document.getElementById("editLevel").value = `${roastLevel}（${roastIndex.toFixed(3)}）`;
-
-    return { roastIndex, roastLevel: `${roastLevel}（${roastIndex.toFixed(3)}）` };
-  } else {
-    document.getElementById("editLevel").value = "";
-    return { roastIndex: null, roastLevel: "" };
-  }
-}
-
-// モーダル入力欄のoninputでリアルタイム更新
-document.getElementById("editPre").addEventListener("input", calcAndUpdateEditRoast);
-document.getElementById("editPost").addEventListener("input", calcAndUpdateEditRoast);
-
-// 保存ボタン処理
-document.getElementById("editSave").addEventListener("click", ()=> {
-  if(!editingId){ alert("編集対象が不明です"); return; }
-  const logsAll = JSON.parse(localStorage.getItem("roastLogs"))||[];
-  const idxAll = logsAll.findIndex(l=>l.id === editingId);
-  if(idxAll<0){ alert("対象が見つかりません"); return; }
-
-  const pre = parseFloat(document.getElementById("editPre").value);
-  const post = parseFloat(document.getElementById("editPost").value);
-
-  // 計算関数で焙煎指数と度合を取得
-  const { roastIndex, roastLevel } = calcAndUpdateEditRoast();
-
-  // 保存
-  logsAll[idxAll] = {
-    ...logsAll[idxAll],
-    beanName: document.getElementById("editBean").value,
-    roastDate: document.getElementById("editDate").value,
-    inputTemp: parseFloat(document.getElementById("editTemp").value) || null,
-    preWeight: pre || null,
-    postWeight: post || null,
-    roastIndex,
-    roastLevel,
-    comment: document.getElementById("editComment").value
+  // グローバル状態
+  let state = {
+    roastTimer: 0,
+    timerInterval: null,
+    temperatureLog: [],
+    firstCrackTimes: [],
+    secondCrackTimes: [],
+    roastEndTime: null,
+    chart: null,
+    historyLog: null,
+    editingId: null,
+    tempInputCallback: null
   };
 
-  localStorage.setItem("roastLogs", JSON.stringify(logsAll));
-  populateFilterOptions();
-  displayHistory();
-  document.getElementById("editModal").style.display = "none";
-});
+  // ユーティリティ関数
+  const utils = {
+    secToHMS(sec) {
+      const h = Math.floor(sec / 3600);
+      const m = Math.floor((sec % 3600) / 60);
+      const s = sec % 60;
+      return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    },
 
+    formatMMSS(sec) {
+      const m = Math.floor(sec / 60);
+      const s = sec % 60;
+      return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    },
 
-
-  // --- 既存の処理（タイマー・記録追加等） ---
-  function startTimer(){
-    temperatureLog = [];
-    firstCrackTimes = [];
-    secondCrackTimes = [];
-    roastEndTime = null;
-    roastTimer = 0;
-    displayTimer(roastTimer);
-    updateTempLogDisplay();
-    updateChart();
-    const inputTemp = parseFloat(document.getElementById("inputTemp").value);
-    if(!isNaN(inputTemp)) temperatureLog.push({time:roastTimer,temp:inputTemp,label:"投入"});
-    if(timerInterval) return;
-    timerInterval=setInterval(()=>{ roastTimer++; displayTimer(roastTimer); },1000);
-  }
-  function pauseTimer(){ clearInterval(timerInterval); timerInterval=null; }
-  function resetTimer(){ clearInterval(timerInterval); roastTimer=0; temperatureLog=[]; firstCrackTimes=[]; secondCrackTimes=[]; roastEndTime=null; displayTimer(0); updateTempLogDisplay(); updateChart(); }
-  function markFirstCrack(){
-  openTempInputModal("■ 1ハゼ時の温度を入力してください", (tempVal)=>{
-    temperatureLog.push({time:roastTimer,temp:tempVal,label:"1ハゼ"});
-    firstCrackTimes.push(roastTimer);
-    updateTempLogDisplay();
-    updateChart();
-  });
-}
-  function markSecondCrack(){
-  openTempInputModal("■ 2ハゼ時の温度を入力してください", (tempVal)=>{
-    temperatureLog.push({time:roastTimer,temp:tempVal,label:"2ハゼ"});
-    secondCrackTimes.push(roastTimer);
-    updateTempLogDisplay();
-    updateChart();
-  });
-}
-  function endTimer(){
-  pauseTimer();
-  roastEndTime = roastTimer;
-  openTempInputModal("■ 終了時の温度を入力してください", (tempVal)=>{
-    temperatureLog.push({time:roastTimer,temp:tempVal,label:"終了"});
-    updateTempLogDisplay();
-    updateChart();
-  });
-}
-  function addTemperature() {
-    const temp = parseFloat(document.getElementById("tempInput").value);
-    if(!isNaN(temp)){
-      temperatureLog.push({time: roastTimer, temp, label: "手動"});
-      document.getElementById("tempInput").value = "";
-      updateTempLogDisplay();
-      updateChart();
+    debounce(func, wait) {
+      let timeout;
+      return function executedFunction(...args) {
+        const later = () => {
+          clearTimeout(timeout);
+          func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+      };
     }
-  }
+  };
 
-  function updateTempLogDisplay(){
-    document.getElementById("tempLogDisplay").innerText=
-      temperatureLog.map(t=>t.label?`${secToHMS(t.time)}:${t.temp}℃ (${t.label})`:`${secToHMS(t.time)}:${t.temp}℃`).join(', ');
-  }
+  // LocalStorage管理
+  const storage = {
+    getLogs() {
+      try {
+        return JSON.parse(localStorage.getItem("roastLogs")) || [];
+      } catch (e) {
+        console.error('Error reading logs:', e);
+        return [];
+      }
+    },
 
-  function updateChart(){
-    const ctx=document.getElementById("tempChart").getContext('2d');
-    if(chart) chart.destroy();
+    saveLogs(logs) {
+      try {
+        localStorage.setItem("roastLogs", JSON.stringify(logs));
+      } catch (e) {
+        console.error('Error saving logs:', e);
+        alert('データの保存に失敗しました');
+      }
+    },
 
-    const currentData = temperatureLog.map(t=>({x:t.time,y:t.temp}));
-    let datasets=[{
-      label:'今回の焙煎',
-      data: currentData,
-      borderColor:'#a67c52',
-      backgroundColor:'rgba(166,124,82,0.2)',
-      tension:0.1,
-      parsing:false,
-      pointBackgroundColor: temperatureLog.map(t=>{
-        if(t.label==='投入') return '#8b4513';
-        if(t.label==='1ハゼ') return 'green';
-        if(t.label==='2ハゼ') return 'blue';
-        if(t.label==='終了') return '#5a3e2b';
-        return '#a67c52';
-      })
-    }];
+    ensureSanity() {
+      const logs = this.getLogs();
+      let changed = false;
 
-    if(historyLog && Array.isArray(historyLog.temperatureLog)){
-      const historyData = historyLog.temperatureLog.map(t=>({x:t.time,y:t.temp}));
-      datasets.push({
-        label:'比較対象の焙煎',
-        data: historyData,
-        borderColor:'#ccc',
-        backgroundColor:'rgba(200,200,200,0.2)',
-        tension:0.1,
-        parsing:false,
-        pointRadius:2
+      for (let log of logs) {
+        if (!log.id) {
+          log.id = Date.now() + '-' + Math.random().toString(36).slice(2, 8);
+          changed = true;
+        }
+        if (typeof log.favorite === 'undefined') {
+          log.favorite = false;
+          changed = true;
+        }
+        if (!Array.isArray(log.temperatureLog)) {
+          log.temperatureLog = [];
+          changed = true;
+        }
+        if (!Array.isArray(log.firstCrackTimes)) {
+          log.firstCrackTimes = [];
+          changed = true;
+        }
+        if (!Array.isArray(log.secondCrackTimes)) {
+          log.secondCrackTimes = [];
+          changed = true;
+        }
+      }
+
+      if (changed) this.saveLogs(logs);
+    }
+  };
+
+  // タイマー管理
+  const timer = {
+    start() {
+      state.temperatureLog = [];
+      state.firstCrackTimes = [];
+      state.secondCrackTimes = [];
+      state.roastEndTime = null;
+      state.roastTimer = 0;
+      this.display();
+      tempLog.update();
+      chart.update();
+
+      const inputTemp = parseFloat(document.getElementById("inputTemp").value);
+      if (!isNaN(inputTemp)) {
+        state.temperatureLog.push({ time: 0, temp: inputTemp, label: "投入" });
+      }
+
+      if (state.timerInterval) return;
+      state.timerInterval = setInterval(() => {
+        state.roastTimer++;
+        this.display();
+      }, 1000);
+    },
+
+    pause() {
+      clearInterval(state.timerInterval);
+      state.timerInterval = null;
+    },
+
+    reset() {
+      this.pause();
+      state.roastTimer = 0;
+      state.temperatureLog = [];
+      state.firstCrackTimes = [];
+      state.secondCrackTimes = [];
+      state.roastEndTime = null;
+      this.display();
+      tempLog.update();
+      chart.update();
+    },
+
+    display() {
+      const timeStr = utils.secToHMS(state.roastTimer);
+      const timeStrShort = utils.formatMMSS(state.roastTimer);
+      document.getElementById("timerValue").textContent = timeStr;
+      document.getElementById("floatingTimerValue").textContent = timeStrShort;
+    },
+
+    markFirstCrack() {
+      modal.openTempInput("1ハゼ時の温度を入力してください", (temp) => {
+        state.temperatureLog.push({ time: state.roastTimer, temp, label: "1ハゼ" });
+        state.firstCrackTimes.push(state.roastTimer);
+        tempLog.update();
+        chart.update();
+      });
+    },
+
+    markSecondCrack() {
+      modal.openTempInput("2ハゼ時の温度を入力してください", (temp) => {
+        state.temperatureLog.push({ time: state.roastTimer, temp, label: "2ハゼ" });
+        state.secondCrackTimes.push(state.roastTimer);
+        tempLog.update();
+        chart.update();
+      });
+    },
+
+    end() {
+      this.pause();
+      state.roastEndTime = state.roastTimer;
+      modal.openTempInput("終了時の温度を入力してください", (temp) => {
+        state.temperatureLog.push({ time: state.roastTimer, temp, label: "終了" });
+        tempLog.update();
+        chart.update();
       });
     }
+  };
 
-    // 秒 → mm:ss に変換
-    const formatTime = (seconds) => {
-        const m = Math.floor(seconds / 60).toString().padStart(2, '0');
-        const s = Math.floor(seconds % 60).toString().padStart(2, '0');
-        return `${m}:${s}`;
-    };
-
-
-    let annotations={};
-    firstCrackTimes.forEach((t,i)=>{ annotations['f'+i]={type:'line', scaleID:'x', value:t, borderColor:'green', borderWidth:2,label:{display:true, content:'1ハゼ', color:'#fff', backgroundColor:'green', position:'start', rotation:0}}; });
-    secondCrackTimes.forEach((t,i)=>{ annotations['s'+i]={type:'line', scaleID:'x', value:t, borderColor:'blue', borderWidth:2,label:{display:true, content:'2ハゼ', color:'#fff', backgroundColor:'blue', position:'start', rotation:0}}; });
-    if(roastEndTime!==null) annotations['end']={type:'line', scaleID:'x', value:roastEndTime, borderColor:'#5a3e2b', borderWidth:2,label:{display:true, content:'終了', color:'#fff', backgroundColor:'#5a3e2b', position:'start', rotation:0}};
-    if(historyLog){
-      (historyLog.firstCrackTimes||[]).forEach((t,i)=>{ annotations['hf'+i]={type:'line', scaleID:'x', value:t, borderColor:'#aaa', borderWidth:1, label:{display:true, content:'1ハゼ', color:'#fff', backgroundColor:'#aaa', position:'start', rotation:0}}; });
-      (historyLog.secondCrackTimes||[]).forEach((t,i)=>{ annotations['hs'+i]={type:'line', scaleID:'x', value:t, borderColor:'#aaa', borderWidth:1, label:{display:true, content:'2ハゼ', color:'#fff', backgroundColor:'#aaa', position:'start', rotation:0}}; });
-      if(historyLog.roastEndTime!==null) annotations['hend']={type:'line', scaleID:'x', value:historyLog.roastEndTime, borderColor:'#aaa', borderWidth:1, label:{display:true, content:'終了', color:'#fff', backgroundColor:'#aaa', position:'start', rotation:0}};
-    }
-
-    chart=new Chart(ctx,{
-      type:'line',
-      data:{datasets},
-      options:{
-        scales:{ x:{ type:'linear', title:{display:true,text:'時間'}, 
-        ticks: {
-          callback: function(value) {
-              return formatTime(value); // x軸ラベルをmm:ss表示
-          }
-        } }, 
-        y:{ title:{display:true,text:'温度(℃)'} } },
-        plugins:{ legend:{ display:true },
-        tooltip: {
-            callbacks: {
-                label: function(context) {
-                    const time = formatTime(context.parsed.x); // mm:ss 表示
-                    return `${context.dataset.label}: ${context.parsed.y}℃ / ${time}`;
-                }
-            }
-        },
-        annotation:{ annotations } }
+  // 温度ログ管理
+  const tempLog = {
+    add() {
+      const temp = parseFloat(document.getElementById("tempInput").value);
+      if (!isNaN(temp)) {
+        state.temperatureLog.push({ time: state.roastTimer, temp, label: "手動" });
+        document.getElementById("tempInput").value = "";
+        this.update();
+        chart.update();
       }
-    });
-  }
+    },
 
-  // 保存時に一意の id と favorite を付与して保存（温度ログ等は deep copy）
-  function saveRoast(){
-    const beanName=document.getElementById("beanName").value;
-    const roastDate=document.getElementById("roastDate").value;
-    const inputTemp=parseFloat(document.getElementById("inputTemp").value);
-    const preWeight=parseFloat(document.getElementById("preWeight").value);
-    const postWeight=parseFloat(document.getElementById("postWeight").value);
-    const roastLevel=document.getElementById("roastLevel").value;
-    const comment=document.getElementById("comment").value;
-    if(!beanName || !roastDate || !preWeight || !postWeight){ alert("必須項目を入力してください"); return; }
-    const roastIndex=preWeight/postWeight;
-    const logs=JSON.parse(localStorage.getItem("roastLogs"))||[];
-    const newId = Date.now().toString() + '-' + Math.random().toString(36).slice(2,8);
-    // deep copy for arrays so later edits don't mutate saved record's arrays via reference
-    const tempLogCopy = JSON.parse(JSON.stringify(temperatureLog || []));
-    const fctCopy = JSON.parse(JSON.stringify(firstCrackTimes || []));
-    const sctCopy = JSON.parse(JSON.stringify(secondCrackTimes || []));
-    logs.push({
-      id: newId,
-      beanName, roastDate, inputTemp, preWeight, postWeight, roastIndex, roastLevel, comment,
-      temperatureLog: tempLogCopy, firstCrackTimes: fctCopy, secondCrackTimes: sctCopy, roastEndTime,
-      favorite: false
-    });
-    localStorage.setItem("roastLogs",JSON.stringify(logs));
-    populateFilterOptions();
-    displayHistory();
-    alert("保存しました");
-  }
+    update() {
+      // 1ハゼの最初の時間を表示
+      const firstCrack = state.firstCrackTimes.length > 0 
+        ? utils.secToHMS(state.firstCrackTimes[0])
+        : '--:--';
+      
+      // 2ハゼの最初の時間を表示
+      const secondCrack = state.secondCrackTimes.length > 0
+        ? utils.secToHMS(state.secondCrackTimes[0])
+        : '--:--';
+      
+      // 終了時間を表示
+      const endTime = state.roastEndTime !== null
+        ? utils.secToHMS(state.roastEndTime)
+        : '--:--';
+      
+      document.getElementById("firstCrackDisplay").textContent = firstCrack;
+      document.getElementById("secondCrackDisplay").textContent = secondCrack;
+      document.getElementById("endTimeDisplay").textContent = endTime;
+    }
+  };
 
-  // 温度入力モーダル
-  let tempInputCallback = null; // OK押下時コールバック
+  // グラフ管理（最適化版）
+  const chart = {
+    update() {
+      const ctx = document.getElementById("tempChart");
+      if (!ctx) return;
 
-  function openTempInputModal(title, callback){
-    document.getElementById("tempInputTitle").innerText = title;
-    document.getElementById("tempInputValue").value = "";
-    tempInputCallback = callback;
-    document.getElementById("tempInputModal").style.display = "block";
-  }
+      // 既存のチャートを破棄
+      if (state.chart) {
+        state.chart.destroy();
+        state.chart = null;
+      }
 
-  // OK
-  document.getElementById("tempInputOK").addEventListener("click", ()=>{
-    const val = parseFloat(document.getElementById("tempInputValue").value);
-    document.getElementById("tempInputModal").style.display = "none";
-    if(!isNaN(val) && tempInputCallback) tempInputCallback(val);
-    tempInputCallback = null;
-  });
+      const currentData = state.temperatureLog.map(t => ({ x: t.time, y: t.temp }));
+      const datasets = [{
+        label: '今回の焙煎',
+        data: currentData,
+        borderColor: '#8B7355',
+        backgroundColor: 'rgba(139, 115, 85, 0.1)',
+        tension: 0.3,
+        pointBackgroundColor: state.temperatureLog.map(t => {
+          if (t.label === '投入') return '#8B7355';
+          if (t.label === '1ハゼ') return '#9C8266';
+          if (t.label === '2ハゼ') return '#C8A882';
+          if (t.label === '終了') return '#7D5E4A';
+          return '#A8927B';
+        }),
+        pointRadius: 4
+      }];
 
-  // キャンセル
-  document.getElementById("tempInputCancel").addEventListener("click", ()=>{
-    document.getElementById("tempInputModal").style.display = "none";
-    tempInputCallback = null;
-  });
+      // 履歴データがあれば追加
+      if (state.historyLog && Array.isArray(state.historyLog.temperatureLog)) {
+        const historyData = state.historyLog.temperatureLog.map(t => ({ x: t.time, y: t.temp }));
+        datasets.push({
+          label: '比較対象',
+          data: historyData,
+          borderColor: '#D4C4B0',
+          backgroundColor: 'rgba(212, 196, 176, 0.1)',
+          tension: 0.3,
+          pointRadius: 2,
+          borderDash: [5, 5]
+        });
+      }
 
-  // ×ボタン
-  document.getElementById("tempInputClose").addEventListener("click", ()=>{
-    document.getElementById("tempInputModal").style.display = "none";
-    tempInputCallback = null;
-  });
+      const annotations = {};
 
-  // モーダル背景クリックで閉じる
-  window.addEventListener("click", (event)=>{
-    const modal = document.getElementById("tempInputModal");
-    if(event.target === modal) modal.style.display = "none";
-  });
+      // アノテーション追加
+      state.firstCrackTimes.forEach((t, i) => {
+        annotations['f' + i] = {
+          type: 'line',
+          scaleID: 'x',
+          value: t,
+          borderColor: '#9C8266',
+          borderWidth: 2,
+          label: { display: true, content: '1ハゼ', backgroundColor: '#9C8266', color: '#fff' }
+        };
+      });
 
+      state.secondCrackTimes.forEach((t, i) => {
+        annotations['s' + i] = {
+          type: 'line',
+          scaleID: 'x',
+          value: t,
+          borderColor: '#C8A882',
+          borderWidth: 2,
+          label: { display: true, content: '2ハゼ', backgroundColor: '#C8A882', color: '#fff' }
+        };
+      });
 
-  // HTMLエスケープ（表示安全）
-  function escapeHtml(str){
-    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  }
+      if (state.roastEndTime !== null) {
+        annotations['end'] = {
+          type: 'line',
+          scaleID: 'x',
+          value: state.roastEndTime,
+          borderColor: '#7D5E4A',
+          borderWidth: 2,
+          label: { display: true, content: '終了', backgroundColor: '#7D5E4A', color: '#fff' }
+        };
+      }
 
-  // イベント登録
-  document.getElementById("startBtn").addEventListener("click", startTimer);
-  document.getElementById("pauseBtn").addEventListener("click", pauseTimer);
-  document.getElementById("resetBtn").addEventListener("click", resetTimer);
-  document.getElementById("firstCrackBtn").addEventListener("click", markFirstCrack);
-  document.getElementById("secondCrackBtn").addEventListener("click", markSecondCrack);
-  document.getElementById("endBtn").addEventListener("click", endTimer);
-  document.getElementById("addTempBtn").addEventListener("click", addTemperature);
-  document.getElementById("saveBtn").addEventListener("click", saveRoast);
+      state.chart = new Chart(ctx, {
+        type: 'line',
+        data: { datasets },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: { duration: 300 }, // アニメーション短縮
+          scales: {
+            x: {
+              type: 'linear',
+              title: { display: true, text: '時間', color: '#5D4434' },
+              ticks: {
+                callback: (value) => utils.formatMMSS(value),
+                color: '#5D4434'
+              },
+              grid: { color: 'rgba(93, 68, 52, 0.1)' }
+            },
+            y: {
+              title: { display: true, text: '温度(℃)', color: '#5D4434' },
+              ticks: { color: '#5D4434' },
+              grid: { color: 'rgba(93, 68, 52, 0.1)' }
+            }
+          },
+          plugins: {
+            legend: { display: true, labels: { color: '#5D4434' } },
+            tooltip: {
+              callbacks: {
+                label: (context) => {
+                  const time = utils.formatMMSS(context.parsed.x);
+                  return `${context.dataset.label}: ${context.parsed.y}℃ (${time})`;
+                }
+              }
+            },
+            annotation: { annotations }
+          }
+        }
+      });
+    }
+  };
 
-  // フィルターボタン
-  document.getElementById("filterBtn").addEventListener("click", displayHistory);
+  // フィルター管理
+  const filters = {
+    favoriteOnly: false,
+
+    populate() {
+      storage.ensureSanity();
+      const logs = storage.getLogs();
+      const beans = new Set();
+      const years = new Set();
+      const months = new Set();
+
+      logs.forEach(log => {
+        beans.add(log.beanName);
+        const d = new Date(log.roastDate);
+        if (!isNaN(d)) {
+          years.add(d.getFullYear());
+          months.add(d.getMonth() + 1);
+        }
+      });
+
+      const beanSelect = document.getElementById("filterBean");
+      const yearSelect = document.getElementById("filterYear");
+      const monthSelect = document.getElementById("filterMonth");
+
+      beanSelect.innerHTML = '<option value="">すべて</option>';
+      yearSelect.innerHTML = '<option value="">すべて</option>';
+      monthSelect.innerHTML = '<option value="">すべて</option>';
+
+      Array.from(beans).sort().forEach(b => {
+        const opt = document.createElement("option");
+        opt.value = b;
+        opt.text = b;
+        beanSelect.add(opt);
+      });
+
+      Array.from(years).sort((a, b) => b - a).forEach(y => {
+        const opt = document.createElement("option");
+        opt.value = y;
+        opt.text = y;
+        yearSelect.add(opt);
+      });
+
+      Array.from(months).sort((a, b) => a - b).forEach(m => {
+        const opt = document.createElement("option");
+        opt.value = m;
+        opt.text = m + '月';
+        monthSelect.add(opt);
+      });
+    },
+
+    getFiltered() {
+      const logs = storage.getLogs();
+      const beanFilter = document.getElementById("filterBean").value;
+      const yearFilter = document.getElementById("filterYear").value;
+      const monthFilter = document.getElementById("filterMonth").value;
+      const levelFilter = document.getElementById("filterLevel").value;
+
+      return logs.filter(log => {
+        // お気に入りフィルター
+        if (this.favoriteOnly && !log.favorite) return false;
+
+        const d = new Date(log.roastDate);
+        const year = d.getFullYear();
+        const month = d.getMonth() + 1;
+        const level = log.roastLevel ? log.roastLevel.split("（")[0] : "";
+
+        if (beanFilter && log.beanName !== beanFilter) return false;
+        if (yearFilter && year !== parseInt(yearFilter)) return false;
+        if (monthFilter && month !== parseInt(monthFilter)) return false;
+        if (levelFilter && level !== levelFilter) return false;
+        return true;
+      });
+    },
+
+    toggleFavoriteOnly() {
+      this.favoriteOnly = !this.favoriteOnly;
+      const btn = document.getElementById("favoriteOnlyBtn");
+      if (this.favoriteOnly) {
+        btn.style.background = 'var(--color-primary)';
+        btn.style.color = 'var(--color-cream)';
+      } else {
+        btn.style.background = '';
+        btn.style.color = '';
+      }
+      history.display();
+    }
+  };
+
+  // 履歴表示（最適化版 - DocumentFragmentを使用）
+  const history = {
+    displayLimit: 5,
+    showingAll: false,
+
+    display() {
+      const container = document.getElementById("historyList");
+      const loading = document.getElementById("historyLoading");
+      
+      loading.classList.add('show');
+      container.innerHTML = '';
+
+      // 非同期処理で重い処理を分割
+      requestAnimationFrame(() => {
+        const logs = filters.getFiltered();
+        const fragment = document.createDocumentFragment();
+
+        if (logs.length === 0) {
+          const empty = document.createElement('div');
+          empty.style.padding = 'var(--spacing-lg)';
+          empty.style.textAlign = 'center';
+          empty.style.color = 'var(--color-text-tertiary)';
+          empty.textContent = '記録がありません';
+          fragment.appendChild(empty);
+        } else {
+          // 最新順にソート
+          logs.sort((a, b) => new Date(b.roastDate) - new Date(a.roastDate));
+
+          // 表示件数を制限
+          const displayLogs = this.showingAll ? logs : logs.slice(0, this.displayLimit);
+
+          displayLogs.forEach(log => {
+            const item = this.createItem(log);
+            fragment.appendChild(item);
+          });
+
+          // もっと見るボタンを追加（表示制限がある場合のみ）
+          if (logs.length > this.displayLimit && !this.showingAll) {
+            const moreBtn = document.createElement('button');
+            moreBtn.className = 'btn btn-secondary btn-block';
+            moreBtn.style.marginTop = 'var(--spacing-md)';
+            moreBtn.textContent = `もっと見る (残り${logs.length - this.displayLimit}件)`;
+            moreBtn.addEventListener('click', () => {
+              this.showingAll = true;
+              this.display();
+            });
+            fragment.appendChild(moreBtn);
+          }
+
+          // 全て表示中で、件数が多い場合は「少なく表示」ボタン
+          if (this.showingAll && logs.length > this.displayLimit) {
+            const lessBtn = document.createElement('button');
+            lessBtn.className = 'btn btn-secondary btn-block';
+            lessBtn.style.marginTop = 'var(--spacing-md)';
+            lessBtn.textContent = '少なく表示';
+            lessBtn.addEventListener('click', () => {
+              this.showingAll = false;
+              this.display();
+              // スクロール位置を履歴セクションの先頭に戻す
+              document.getElementById('historyList').scrollIntoView({ behavior: 'smooth' });
+            });
+            fragment.appendChild(lessBtn);
+          }
+        }
+
+        container.appendChild(fragment);
+        loading.classList.remove('show');
+      });
+    },
+
+    createItem(log) {
+      const item = document.createElement('div');
+      item.className = 'history-item';
+
+      const level = log.roastLevel ? log.roastLevel.split("（")[0] : "";
+      let badgeClass = 'badge-light';
+      if (level === '中煎り') badgeClass = 'badge-medium';
+      if (level === '深煎り') badgeClass = 'badge-dark';
+
+      item.innerHTML = `
+        <div class="history-item-content">
+          <div class="history-item-title">${log.beanName || '名称未設定'}</div>
+          <div class="history-item-subtitle">
+            <span>${log.roastDate || ''}</span>
+            ${level ? `<span class="badge ${badgeClass}">${level}</span>` : ''}
+          </div>
+        </div>
+        <div class="history-item-actions">
+          <button class="favorite-btn ${log.favorite ? 'active' : ''}" data-id="${log.id}">${log.favorite ? '★' : '☆'}</button>
+          <button class="action-btn edit-btn" data-id="${log.id}" title="編集">✏️</button>
+          <button class="action-btn delete-btn" data-id="${log.id}" title="削除">🗑️</button>
+        </div>
+      `;
+
+      // イベントリスナーを個別に追加（イベント委譲より効率的）
+      item.addEventListener('click', (e) => {
+        if (!e.target.closest('button')) {
+          state.historyLog = log;
+          document.getElementById("historyLabel").textContent = 
+            `履歴参照: ${log.beanName} / ${log.roastDate}`;
+          chart.update();
+        }
+      });
+
+      const favBtn = item.querySelector('.favorite-btn');
+      favBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.toggleFavorite(log.id);
+      });
+
+      const editBtn = item.querySelector('.edit-btn');
+      editBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        modal.openEdit(log.id);
+      });
+
+      const deleteBtn = item.querySelector('.delete-btn');
+      deleteBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.delete(log.id);
+      });
+
+      return item;
+    },
+
+    toggleFavorite(id) {
+      const logs = storage.getLogs();
+      const log = logs.find(l => l.id === id);
+      if (log) {
+        log.favorite = !log.favorite;
+        storage.saveLogs(logs);
+        this.display();
+      }
+    },
+
+    delete(id) {
+      if (!confirm('この記録を削除しますか？')) return;
+      const logs = storage.getLogs();
+      const filtered = logs.filter(l => l.id !== id);
+      storage.saveLogs(filtered);
+      filters.populate();
+      this.display();
+    }
+  };
+
+  // モーダル管理
+  const modal = {
+    openEdit(id) {
+      const logs = storage.getLogs();
+      const log = logs.find(l => l.id === id);
+      if (!log) return;
+
+      state.editingId = id;
+      document.getElementById("editBean").value = log.beanName || "";
+      document.getElementById("editDate").value = log.roastDate || "";
+      document.getElementById("editTemp").value = log.inputTemp ?? "";
+      document.getElementById("editPre").value = log.preWeight ?? "";
+      document.getElementById("editPost").value = log.postWeight ?? "";
+      document.getElementById("editLevel").value = log.roastLevel || "";
+      document.getElementById("editComment").value = log.comment || "";
+      document.getElementById("editModal").style.display = "block";
+    },
+
+    saveEdit() {
+      if (!state.editingId) return;
+      const logs = storage.getLogs();
+      const log = logs.find(l => l.id === state.editingId);
+      if (!log) return;
+
+      const pre = parseFloat(document.getElementById("editPre").value);
+      const post = parseFloat(document.getElementById("editPost").value);
+      let roastLevel = "";
+      let roastIndex = null;
+
+      if (pre > 0 && post > 0) {
+        roastIndex = pre / post;
+        if (roastIndex < 1.15) roastLevel = "浅煎り";
+        else if (roastIndex < 1.2) roastLevel = "中煎り";
+        else roastLevel = "深煎り";
+        roastLevel = `${roastLevel}（${roastIndex.toFixed(3)}）`;
+      }
+
+      Object.assign(log, {
+        beanName: document.getElementById("editBean").value,
+        roastDate: document.getElementById("editDate").value,
+        inputTemp: parseFloat(document.getElementById("editTemp").value) || null,
+        preWeight: pre || null,
+        postWeight: post || null,
+        roastIndex,
+        roastLevel,
+        comment: document.getElementById("editComment").value
+      });
+
+      storage.saveLogs(logs);
+      filters.populate();
+      history.display();
+      document.getElementById("editModal").style.display = "none";
+    },
+
+    openTempInput(title, callback) {
+      document.getElementById("tempInputTitle").textContent = title;
+      document.getElementById("tempInputValue").value = "";
+      state.tempInputCallback = callback;
+      document.getElementById("tempInputModal").style.display = "block";
+    },
+
+    confirmTempInput() {
+      const val = parseFloat(document.getElementById("tempInputValue").value);
+      document.getElementById("tempInputModal").style.display = "none";
+      if (!isNaN(val) && state.tempInputCallback) {
+        state.tempInputCallback(val);
+      }
+      state.tempInputCallback = null;
+    },
+
+    close(modalId) {
+      document.getElementById(modalId).style.display = "none";
+      state.tempInputCallback = null;
+    }
+  };
+
+  // フォーム管理
+  const form = {
+    updateRoastLevel() {
+      const pre = parseFloat(document.getElementById("preWeight").value);
+      const post = parseFloat(document.getElementById("postWeight").value);
+      if (pre > 0 && post > 0) {
+        const index = pre / post;
+        let level = "";
+        if (index < 1.15) level = "浅煎り";
+        else if (index < 1.2) level = "中煎り";
+        else level = "深煎り";
+        document.getElementById("roastLevel").value = `${level}（${index.toFixed(3)}）`;
+      }
+    },
+
+    updateEditRoastLevel() {
+      const pre = parseFloat(document.getElementById("editPre").value);
+      const post = parseFloat(document.getElementById("editPost").value);
+      if (pre > 0 && post > 0) {
+        const index = pre / post;
+        let level = "";
+        if (index < 1.15) level = "浅煎り";
+        else if (index < 1.2) level = "中煎り";
+        else level = "深煎り";
+        document.getElementById("editLevel").value = `${level}（${index.toFixed(3)}）`;
+      }
+    },
+
+    save() {
+      const beanName = document.getElementById("beanName").value;
+      const roastDate = document.getElementById("roastDate").value;
+      const inputTemp = parseFloat(document.getElementById("inputTemp").value);
+      const preWeight = parseFloat(document.getElementById("preWeight").value);
+      const postWeight = parseFloat(document.getElementById("postWeight").value);
+      const roastLevel = document.getElementById("roastLevel").value;
+      const comment = document.getElementById("comment").value;
+
+      if (!beanName || !roastDate || !preWeight || !postWeight) {
+        alert("必須項目を入力してください");
+        return;
+      }
+
+      const roastIndex = preWeight / postWeight;
+      const logs = storage.getLogs();
+      const newId = Date.now() + '-' + Math.random().toString(36).slice(2, 8);
+
+      logs.push({
+        id: newId,
+        beanName,
+        roastDate,
+        inputTemp,
+        preWeight,
+        postWeight,
+        roastIndex,
+        roastLevel,
+        comment,
+        temperatureLog: JSON.parse(JSON.stringify(state.temperatureLog)),
+        firstCrackTimes: [...state.firstCrackTimes],
+        secondCrackTimes: [...state.secondCrackTimes],
+        roastEndTime: state.roastEndTime,
+        favorite: false
+      });
+
+      storage.saveLogs(logs);
+      filters.populate();
+      history.display();
+      alert("保存しました");
+    }
+  };
+
+  // CSV出力
+  const csv = {
+    export() {
+      const logs = storage.getLogs();
+      if (logs.length === 0) {
+        alert("保存データがありません");
+        return;
+      }
+
+      // データ分析用に最適化されたヘッダー
+      const headers = [
+        "記録ID",
+        "焙煎日",
+        "豆名",
+        "投入温度_℃",
+        "焙煎前重量_g",
+        "焙煎後重量_g",
+        "減量率_%",
+        "焙煎指数",
+        "焙煎度",
+        "1ハゼ時間_秒",
+        "1ハゼ時間_mm:ss",
+        "1ハゼ温度_℃",
+        "2ハゼ時間_秒",
+        "2ハゼ時間_mm:ss",
+        "2ハゼ温度_℃",
+        "終了時間_秒",
+        "終了時間_mm:ss",
+        "終了温度_℃",
+        "総焙煎時間_秒",
+        "総焙煎時間_mm:ss",
+        "お気に入り",
+        "コメント"
+      ];
+      
+      const rows = logs.map(log => {
+        // 減量率計算
+        const weightLoss = log.preWeight && log.postWeight 
+          ? (((log.preWeight - log.postWeight) / log.preWeight) * 100).toFixed(2)
+          : "";
+        
+        // 焙煎指数（数値のみ）
+        const roastIndex = log.roastIndex ? log.roastIndex.toFixed(3) : "";
+        
+        // 焙煎度（カテゴリのみ）
+        const roastLevel = log.roastLevel ? log.roastLevel.split("（")[0] : "";
+        
+        // 1ハゼ情報
+        const firstCrackTime = log.firstCrackTimes && log.firstCrackTimes.length > 0 
+          ? log.firstCrackTimes[0] 
+          : "";
+        const firstCrackTimeFormatted = firstCrackTime !== "" 
+          ? utils.formatMMSS(firstCrackTime)
+          : "";
+        const firstCrackTemp = log.temperatureLog && log.firstCrackTimes && log.firstCrackTimes.length > 0
+          ? (log.temperatureLog.find(t => t.time === log.firstCrackTimes[0] && t.label === "1ハゼ")?.temp || "")
+          : "";
+        
+        // 2ハゼ情報
+        const secondCrackTime = log.secondCrackTimes && log.secondCrackTimes.length > 0
+          ? log.secondCrackTimes[0]
+          : "";
+        const secondCrackTimeFormatted = secondCrackTime !== ""
+          ? utils.formatMMSS(secondCrackTime)
+          : "";
+        const secondCrackTemp = log.temperatureLog && log.secondCrackTimes && log.secondCrackTimes.length > 0
+          ? (log.temperatureLog.find(t => t.time === log.secondCrackTimes[0] && t.label === "2ハゼ")?.temp || "")
+          : "";
+        
+        // 終了時間と温度
+        const endTime = log.roastEndTime ?? "";
+        const endTimeFormatted = endTime !== ""
+          ? utils.formatMMSS(endTime)
+          : "";
+        const endTemp = log.temperatureLog && log.roastEndTime !== null
+          ? (log.temperatureLog.find(t => t.time === log.roastEndTime && t.label === "終了")?.temp || "")
+          : "";
+        
+        // 総焙煎時間
+        const totalTime = log.roastEndTime ?? "";
+        const totalTimeFormatted = totalTime !== ""
+          ? utils.formatMMSS(totalTime)
+          : "";
+        
+        return [
+          log.id || "",
+          log.roastDate || "",
+          log.beanName || "",
+          log.inputTemp ?? "",
+          log.preWeight ?? "",
+          log.postWeight ?? "",
+          weightLoss,
+          roastIndex,
+          roastLevel,
+          firstCrackTime,
+          firstCrackTimeFormatted,
+          firstCrackTemp,
+          secondCrackTime,
+          secondCrackTimeFormatted,
+          secondCrackTemp,
+          endTime,
+          endTimeFormatted,
+          endTemp,
+          totalTime,
+          totalTimeFormatted,
+          log.favorite ? "1" : "0",
+          log.comment ?? ""
+        ].map(v => {
+          // CSVエスケープ処理
+          const str = String(v);
+          if (str.includes(',') || str.includes('"') || str.includes('\n')) {
+            return `"${str.replace(/"/g, '""')}"`;
+          }
+          return str;
+        }).join(",");
+      });
+
+      const bom = "\uFEFF";
+      const csvContent = bom + [headers.join(","), ...rows].join("\r\n");
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth() + 1).padStart(2, '0');
+      const dd = String(today.getDate()).padStart(2, '0');
+      a.download = `roast_log_${yyyy}${mm}${dd}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+  };
 
   // 初期化
-  populateFilterOptions();
-  //　displayHistory(); // 初回表示（不要ならコメントアウトしてください）
+  function init() {
+    // 焙煎情報のトグル機能
+    const roastInfoHeader = document.getElementById("roastInfoHeader");
+    const roastInfoBody = document.getElementById("roastInfoBody");
+    const roastInfoToggle = document.getElementById("roastInfoToggle");
+    
+    roastInfoHeader.addEventListener("click", (e) => {
+      // ボタン自体のクリックは処理しない（二重発火防止）
+      if (e.target === roastInfoToggle) return;
+      
+      if (roastInfoBody.style.display === "none") {
+        roastInfoBody.style.display = "block";
+        roastInfoToggle.textContent = "折りたたむ";
+      } else {
+        roastInfoBody.style.display = "none";
+        roastInfoToggle.textContent = "焙煎情報を入力";
+      }
+    });
+    
+    roastInfoToggle.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (roastInfoBody.style.display === "none") {
+        roastInfoBody.style.display = "block";
+        roastInfoToggle.textContent = "折りたたむ";
+      } else {
+        roastInfoBody.style.display = "none";
+        roastInfoToggle.textContent = "焙煎情報を入力";
+      }
+    });
 
-// DOMContentLoaded 内に追加
+    // ハンバーガーメニュー
+    const menuToggle = document.getElementById("menuToggle");
+    const sideMenu = document.getElementById("sideMenu");
+    const menuClose = document.getElementById("menuClose");
+    const menuOverlay = document.getElementById("menuOverlay");
+    
+    const openMenu = () => {
+      sideMenu.classList.add("active");
+      menuToggle.classList.add("open");
+      menuOverlay.classList.add("active");
+    };
+    
+    const closeMenu = () => {
+      sideMenu.classList.remove("active");
+      menuToggle.classList.remove("open");
+      menuOverlay.classList.remove("active");
+    };
+    
+    menuToggle.addEventListener("click", openMenu);
+    menuClose.addEventListener("click", closeMenu);
+    menuOverlay.addEventListener("click", closeMenu);
 
-// CSV出力関数
-function exportCSV() {
-  const logs = JSON.parse(localStorage.getItem("roastLogs")) || [];
-  if(logs.length === 0){ alert("保存データがありません"); return; }
+    // フローティングタイマー
+    const timerValueElement = document.getElementById("timerValue");
+    const timerDisplayWrapper = document.getElementById("timerDisplayWrapper");
+    const floatingTimer = document.getElementById("floatingTimer");
+    
+    window.addEventListener("scroll", () => {
+      const valueRect = timerValueElement.getBoundingClientRect();
+      
+      // timer-valueが画面上から消えたらフローティング表示
+      if (valueRect.bottom < 0) {
+        floatingTimer.classList.add("show");
+        timerDisplayWrapper.classList.add("floating-active");
+      } else {
+        floatingTimer.classList.remove("show");
+        timerDisplayWrapper.classList.remove("floating-active");
+      }
+    });
 
-  const headers = ["お気に入り","豆名","焙煎日","焙煎度","焙煎前重量","焙煎後重量","投入温度","1ハゼ","2ハゼ","終了時間","温度ログ","コメント"];
-  
-  const rows = logs.map(log => {
-    const firstCrack = (log.firstCrackTimes||[]).map(formatMMSS).join(";");
-    const secondCrack = (log.secondCrackTimes||[]).map(formatMMSS).join(";");
-    const tempLog = (log.temperatureLog||[])
-      .map(t => `${formatMMSS(t.time)}:${t.temp}℃${t.label?`(${t.label})`:''}`)
-      .join(", ");
-    return [
-      log.favorite?"★":"☆",
-      log.beanName || "",
-      log.roastDate || "",
-      log.roastLevel || "",
-      log.preWeight ?? "",
-      log.postWeight ?? "",
-      log.inputTemp ?? "",
-      firstCrack,
-      secondCrack,
-      log.roastEndTime!==null && log.roastEndTime!==undefined ? formatMMSS(log.roastEndTime) : '',
-      tempLog,
-      log.comment ?? ""
-    ].map(v => `"${v}"`).join(",");
-  });
+    // イベントリスナー登録
+    document.getElementById("startBtn").addEventListener("click", () => timer.start());
+    document.getElementById("pauseBtn").addEventListener("click", () => timer.pause());
+    document.getElementById("resetBtn").addEventListener("click", () => timer.reset());
+    document.getElementById("firstCrackBtn").addEventListener("click", () => timer.markFirstCrack());
+    document.getElementById("secondCrackBtn").addEventListener("click", () => timer.markSecondCrack());
+    document.getElementById("endBtn").addEventListener("click", () => timer.end());
+    document.getElementById("addTempBtn").addEventListener("click", () => tempLog.add());
+    document.getElementById("saveBtn").addEventListener("click", () => form.save());
+    document.getElementById("filterBtn").addEventListener("click", () => history.display());
+    document.getElementById("favoriteOnlyBtn").addEventListener("click", () => filters.toggleFavoriteOnly());
+    document.getElementById("exportCsvBtn").addEventListener("click", () => csv.export());
 
-  const bom = "\uFEFF";
-  const csvContent = bom + [headers.join(","), ...rows].join("\r\n");
+    // フォーム自動計算
+    document.getElementById("postWeight").addEventListener("input", () => form.updateRoastLevel());
+    document.getElementById("preWeight").addEventListener("input", () => form.updateRoastLevel());
+    document.getElementById("editPre").addEventListener("input", () => form.updateEditRoastLevel());
+    document.getElementById("editPost").addEventListener("input", () => form.updateEditRoastLevel());
 
-  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  const today = new Date();
-  const yyyy = today.getFullYear();
-  const mm = String(today.getMonth()+1).padStart(2,'0');
-  const dd = String(today.getDate()).padStart(2,'0');
-  a.download = `roast_log_${yyyy}-${mm}-${dd}.csv`;
-  a.click();
-  URL.revokeObjectURL(url);
-}
+    // モーダル
+    document.getElementById("editClose").addEventListener("click", () => modal.close("editModal"));
+    document.getElementById("editSave").addEventListener("click", () => modal.saveEdit());
+    document.getElementById("tempInputClose").addEventListener("click", () => modal.close("tempInputModal"));
+    document.getElementById("tempInputCancel").addEventListener("click", () => modal.close("tempInputModal"));
+    document.getElementById("tempInputOK").addEventListener("click", () => modal.confirmTempInput());
 
+    // モーダル背景クリック
+    window.addEventListener("click", (e) => {
+      if (e.target.classList.contains('modal')) {
+        e.target.style.display = "none";
+      }
+    });
 
-// 秒を mm:ss に変換
-function formatMMSS(sec){
-  const m = Math.floor(sec/60);
-  const s = sec%60;
-  return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-}
+    // 初期データ読み込み
+    filters.populate();
+    history.display();
+    chart.update();
+  }
 
-// CSV出力ボタンイベント
-document.getElementById("exportCsvBtn").addEventListener("click", exportCSV);
-
-
-}); // DOMContentLoaded end
+  // DOMContentLoaded
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
 </script>
+
 </body>
 </html>

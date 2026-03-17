@@ -1,255 +1,417 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>プライバシーポリシー</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="自家焙煎コーヒー記録管理アプリのプライバシーポリシー">
+<title>プライバシーポリシー | 自家焙煎コーヒー記録管理</title>
 <style>
-body { 
-  font-family: sans-serif; 
-  margin:0; 
-  padding:0; 
-  background:#f3ebe0; 
-  display:flex; 
-  flex-direction:column; 
-  align-items:center;
-  box-sizing: border-box; 
-  overflow-x: hidden; /* 横スクロール防止 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
-header {
+
+:root {
+  --color-primary: #8B7355;
+  --color-coffee-darkest: #3E2C1F;
+  --color-coffee-dark: #5D4434;
+  --color-coffee-medium: #7D5E4A;
+  --color-coffee-light: #A8927B;
+  --color-cream: #FFF9F0;
+  --color-latte: #EBE0D3;
+  --color-latte-light: #F5EFE5;
+  --color-bg: #F5EFE5;
+  --color-bg-secondary: #FFF9F0;
+  --color-separator: rgba(93, 68, 52, 0.15);
+  --color-text-primary: #3E2C1F;
+  --color-text-secondary: #5D4434;
+  --color-text-tertiary: rgba(93, 68, 52, 0.5);
+  --shadow-sm: 0 1px 2px rgba(62, 44, 31, 0.08);
+  --shadow-md: 0 2px 8px rgba(62, 44, 31, 0.12);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, 'Noto Sans JP', sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text-primary);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ナビゲーションバー */
+.nav-bar {
+  position: sticky;
+  top: 0;
+  background: var(--color-latte);
+  border-bottom: 0.5px solid var(--color-separator);
+  padding: var(--spacing-md);
+  z-index: 100;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.nav-content {
+  max-width: 1200px;
+  margin: 0 auto;
   display: flex;
   align-items: center;
-  position: relative;
   justify-content: space-between;
-  width: 100%;
-  background: #e8d6c3;
-  color: #4b3f36;
-  padding: 20px;
-  font-weight: bold;
-  box-sizing: border-box;
 }
-.logo {
-  font-size: 1.5em;
-  font-weight: bold;
-  padding-left: 0.3em;
-  padding-right: 0.3em;
-  box-sizing: border-box;
+
+.nav-brand {
   flex: 1;
   text-align: center;
 }
-.logo-ja {
-  font-family: 'Noto Sans JP', sans-serif;
-  font-size: medium;
+
+.nav-title {
+  font-size: 20px;
   font-weight: 700;
-  letter-spacing: 2px;
-  padding-bottom: 0.2em;
-}
-.logo-en {
-  font-family: 'Montserrat', sans-serif;
-  font-size: small;
-  font-weight: 600;
-  letter-spacing: 2px;
-  color: #4b3621;
-}
-.spacer {
-  width: 25px; 
+  color: var(--color-coffee-dark);
+  margin-bottom: 2px;
+  letter-spacing: 1px;
 }
 
-/* ハンバーガーボタン */
+.nav-subtitle {
+  font-size: 11px;
+  color: var(--color-coffee-medium);
+  font-weight: 600;
+  letter-spacing: 1.5px;
+}
+
+.nav-spacer {
+  width: 38px;
+}
+
+/* ハンバーガーメニュー */
 .menu-toggle {
   display: flex;
   flex-direction: column;
   cursor: pointer;
-  gap: 5px;
+  gap: 4px;
   z-index: 1001;
-}
-.menu-toggle span {
-  display: block;
-  width: 25px;
-  height: 3px;
-  background: #4b3f36;
-  transition: 0.3s;
+  padding: 8px;
 }
 
-/* メニュー（サイドバー） */
-nav {
+.menu-toggle span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--color-coffee-dark);
+  transition: 0.3s;
+  border-radius: 2px;
+}
+
+.menu-toggle.open span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.menu-toggle.open span:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-toggle.open span:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
+}
+
+/* サイドメニュー */
+.side-menu {
   position: fixed;
   top: 0;
   right: 0;
   width: 250px;
   height: 100%;
-  background: #f3ebe0;
-  box-shadow: -2px 0 8px rgba(0,0,0,0.2);
+  background: var(--color-bg-secondary);
+  box-shadow: -2px 0 8px rgba(62, 44, 31, 0.2);
   display: flex;
   flex-direction: column;
-  padding: 60px 20px;
-  transform: translateX(100%); /* 初期状態は右に隠す */
-  transition: right 0.3s ease;
+  padding: 60px 20px 20px;
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
   z-index: 1000;
 }
-nav.active {
-  transform: translateX(0); /* 表示状態は元の位置 */
+
+.side-menu.active {
+  transform: translateX(0);
 }
-nav a {
-  color: #4b3621;
+
+.side-menu-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 32px;
+  color: var(--color-coffee-dark);
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  line-height: 1;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.side-menu-close:hover {
+  color: var(--color-primary);
+}
+
+.side-menu a {
+  color: var(--color-coffee-dark);
   text-align: left;
-  font-size: 1em;
+  font-size: 16px;
   text-decoration: none;
-  padding: 10px 0;
+  padding: 12px 0;
+  border-bottom: 0.5px solid var(--color-separator);
+  font-weight: 500;
 }
-nav a:hover {
+
+.side-menu a:hover {
+  color: var(--color-primary);
+}
+
+/* メニュー背景オーバーレイ */
+.menu-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(62, 44, 31, 0.4);
+  z-index: 999;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+.menu-overlay.active {
+  display: block;
+}
+
+/* メインコンテンツ */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: var(--spacing-lg);
+  padding-bottom: 80px;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+  padding: var(--spacing-xl) 0;
+}
+
+.page-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--color-coffee-darkest);
+  margin-bottom: var(--spacing-sm);
+}
+
+.section {
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.section h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-coffee-dark);
+  margin-bottom: var(--spacing-md);
+  padding-left: var(--spacing-sm);
+  border-left: 4px solid var(--color-primary);
+}
+
+.section p {
+  margin-bottom: var(--spacing-md);
+  color: var(--color-text-secondary);
+}
+
+.section a {
+  color: var(--color-primary);
   text-decoration: underline;
 }
 
-/* ハンバーガーを×にする */
-.menu-toggle.open span:nth-child(1) {
-  transform: rotate(45deg) translate(5px, 5px);
-}
-.menu-toggle.open span:nth-child(2) {
-  opacity: 0;
-}
-.menu-toggle.open span:nth-child(3) {
-  transform: rotate(-45deg) translate(6px, -6px);
+.section a:hover {
+  color: var(--color-coffee-dark);
 }
 
-/* 見出し */
-h1 {
-  font-size: x-large;
-  color:#5a3e2b;
-  text-align: center;
-}
-h2 {
-  font-size: large;
-  color:#5a3e2b;
-  text-align:left;
-  border-left:4px solid #5a3e2b;
-  padding-left: 0.5em;
-  margin: 0.5em 0;
-}
-
-p { 
-  font-size: 1em; line-height:1.6; margin-top: 1em; color:#4b3f36; 
-}
-
-footer { 
-  font-family: sans-serif;
+/* フッター */
+footer {
   width: 100%;
-  text-align:center; 
-  padding:20px; 
-  background:#e8d6c3;
-  font-size: small; 
-  color:#4b3f36;
-  box-sizing: border-box;
+  text-align: center;
+  padding: var(--spacing-lg);
+  background: var(--color-latte);
+  font-size: 12px;
+  color: var(--color-coffee-dark);
+  margin-top: var(--spacing-xl);
 }
-footer a { 
-  color:#6b4f3c; 
-  text-decoration:none; 
-  font-weight:500;
-  padding: 20px; 
+
+footer a {
+  color: var(--color-coffee-medium);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0 var(--spacing-sm);
 }
+
 footer a:hover {
-  text-decoration:underline; 
+  text-decoration: underline;
 }
-footer p {
-  padding-top: 20px;
-  padding-bottom: 20px;
-  margin: 0;  
-}
-footer div {
+
+.footer-links {
   display: flex;
   justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
 }
-.container { 
-  font-weight: normal; 
-  max-width:900px; 
-  width:95%; 
-  padding:20px; 
-  background:#fff8f0; 
-  margin:20px auto; 
-  border-radius:10px; 
-  box-shadow:0 0 10px rgba(0,0,0,0.1); 
-  box-sizing: border-box;
+
+/* レスポンシブ */
+@media (max-width: 768px) {
+  .container {
+    padding: var(--spacing-md);
+  }
+
+  .page-title {
+    font-size: 24px;
+  }
+
+  .section h2 {
+    font-size: 18px;
+  }
 }
 </style>
-
-
-<!--googlefont-->
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@700&family=Montserrat:wght@600&display=swap" rel="stylesheet">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 <link rel="manifest" href="/site.webmanifest">
-
-
 </head>
-
 <body>
-  <header>
-    <div class="spacer"></div>
-    <div class="logo">
-      <div class="logo-ja">自家焙煎コーヒー記録管理</div>
-      <div class="logo-en">COFFEE ROASTING LOG</div>
-    </div>
-    <div class="menu-toggle" id="menu-toggle">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-  </header>
 
-  <!-- サイドバー -->
-  <nav id="nav">
-    <a href="/">ホーム</a>
-    <a href="/howtouse.html">サイトの利用方法</a>
-    <a href="/inquiryform.html">お問い合わせ</a>
-    <a href="/privacy.html">プライバシーポリシー</a>
-  </nav>
+<div class="nav-bar">
+  <div class="nav-content">
+    <div class="nav-spacer"></div>
+    <div class="nav-brand">
+      <div class="nav-title">自家焙煎コーヒー記録管理</div>
+      <div class="nav-subtitle">COFFEE ROASTING LOG</div>
+    </div>
+    <div class="menu-toggle" id="menuToggle">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+</div>
 
-  <div class="container">
-    <h1>プライバシーポリシー</h1>
+<!-- サイドメニュー -->
+<div class="menu-overlay" id="menuOverlay"></div>
+<nav class="side-menu" id="sideMenu">
+  <button class="side-menu-close" id="menuClose">&times;</button>
+  <a href="/">ホーム</a>
+  <a href="/howtouse.html">サイトの利用方法</a>
+  <a href="/inquiryform.html">お問い合わせ</a>
+  <a href="/privacy.html">プライバシーポリシー</a>
+</nav>
+
+<div class="container">
+  <div class="page-header">
+    <h1 class="page-title">プライバシーポリシー</h1>
+  </div>
+
+  <div class="section">
     <p>本サイトでは、利用者のプライバシーを尊重し、個人情報を適切に取り扱います。以下に、本サイトにおける情報の収集・利用に関する方針を示します。</p>
+  </div>
+
+  <div class="section">
     <h2>1. 情報の取得について</h2>
-    <p>本サイトでは、以下の目的でCookieやアクセスデータを利用する場合があります。<br>
-    ・サイト利用状況の解析<br>
-    ・広告配信の最適化<br>
-    ・アフィリエイトプログラムに基づく紹介</p>
+    <p>本サイトでは、以下の目的でCookieやアクセスデータを利用する場合があります。</p>
+    <ul style="margin-left: 20px; color: var(--color-text-secondary);">
+      <li>サイト利用状況の解析</li>
+      <li>広告配信の最適化</li>
+      <li>アフィリエイトプログラムに基づく紹介</li>
+    </ul>
+  </div>
+
+  <div class="section">
     <h2>2. アクセス解析ツールについて</h2>
-    <p>本サイトでは「Google Analytics 4」を利用しています。<br>
-    Google AnalyticsはCookieを利用して匿名のトラフィックデータを収集しますが、個人を特定する情報は含まれません。<br>
-    収集されたデータはGoogle社のプライバシーポリシーに基づいて管理されます。<br>
-    詳細は <a href="https://policies.google.com/technologies/partner-sites?hl=ja" target="_blank">Googleのプライバシーポリシー</a> をご参照ください。</p>
+    <p>本サイトでは「Google Analytics 4」を利用しています。Google AnalyticsはCookieを利用して匿名のトラフィックデータを収集しますが、個人を特定する情報は含まれません。収集されたデータはGoogle社のプライバシーポリシーに基づいて管理されます。</p>
+    <p>詳細は <a href="https://policies.google.com/technologies/partner-sites?hl=ja" target="_blank">Googleのプライバシーポリシー</a> をご参照ください。</p>
+  </div>
+
+  <div class="section">
     <h2>3. 広告配信について</h2>
-    <p>本サイトでは「Google AdSense」を利用しています。<br>
-    GoogleはCookieを使用してユーザーに適切な広告を表示することがあり、収集された情報はGoogle社のプライバシーポリシーに基づいて管理されます。<br>
+    <p>本サイトでは「Google AdSense」を利用しています。GoogleはCookieを使用してユーザーに適切な広告を表示することがあり、収集された情報はGoogle社のプライバシーポリシーに基づいて管理されます。</p>
+  </div>
+
+  <div class="section">
     <h2>4. アフィリエイトプログラムについて</h2>
     <p>当サイトは、Amazon.co.jpを宣伝しリンクすることによって紹介料を獲得できるアフィリエイトプログラムである「Amazonアソシエイト・プログラム」の参加者です。</p>
+  </div>
+
+  <div class="section">
     <h2>5. Cookieの利用について</h2>
     <p>本サイトでは、広告配信やアクセス解析のためにCookieを使用する場合があります。ユーザーはブラウザの設定によりCookieを無効化することが可能です。ただし、一部機能が正しく動作しない場合があります。</p>
+  </div>
+
+  <div class="section">
     <h2>6. 免責事項</h2>
     <p>当サイトは商用・私用を問わず、どなたでもご自由にお使いいただけます。ただし、当サイトによって生じた損害等の一切の責任を負いかねますので自己責任での利用をお願いいたします。</p>
+  </div>
+
+  <div class="section">
     <h2>7. プライバシーポリシーの改定について</h2>
     <p>本ポリシーの内容は予告なく変更される場合があります。変更後の内容は本ページに掲載された時点で効力を発生するものとします。</p>
   </div>
+</div>
 
-  <footer>
-    <div id="footer-guide">
-      <a href="/">ホーム</a>
-      <p> | </p>
-      <a href="/howtouse.html">サイトの利用方法</a>
-      <p> | </p>
-      <a href="/privacy.html">プライバシー</a>
-    </div>
-  </footer>
+<footer>
+  <div class="footer-links">
+    <a href="/">ホーム</a>
+    <span>|</span>
+    <a href="/howtouse.html">サイトの利用方法</a>
+    <span>|</span>
+    <a href="/inquiryform.html">お問い合わせ</a>
+    <span>|</span>
+    <a href="/privacy.html">プライバシーポリシー</a>
+  </div>
+  <p style="margin-top: 12px;">&copy; 2025 自家焙煎コーヒー記録管理. All rights reserved.</p>
+</footer>
 
-  <script>
-    const toggle = document.getElementById("menu-toggle");
-    const nav = document.getElementById("nav");
+<script>
+  // ハンバーガーメニュー
+  const menuToggle = document.getElementById("menuToggle");
+  const sideMenu = document.getElementById("sideMenu");
+  const menuClose = document.getElementById("menuClose");
+  const menuOverlay = document.getElementById("menuOverlay");
 
-    toggle.addEventListener("click", () => {
-      nav.classList.toggle("active"); // サイドバー表示
-      toggle.classList.toggle("open"); // ハンバーガーを×に
-    });
-  </script>
+  const openMenu = () => {
+    sideMenu.classList.add("active");
+    menuToggle.classList.add("open");
+    menuOverlay.classList.add("active");
+  };
+
+  const closeMenu = () => {
+    sideMenu.classList.remove("active");
+    menuToggle.classList.remove("open");
+    menuOverlay.classList.remove("active");
+  };
+
+  menuToggle.addEventListener("click", openMenu);
+  menuClose.addEventListener("click", closeMenu);
+  menuOverlay.addEventListener("click", closeMenu);
+</script>
 
 </body>
 </html>

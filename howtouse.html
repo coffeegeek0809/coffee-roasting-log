@@ -1,277 +1,1137 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>サイトの利用方法</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="自家焙煎コーヒー記録管理アプリの使い方ガイド - すべての機能を詳しく解説">
+<title>使い方ガイド | 自家焙煎コーヒー記録管理</title>
 <style>
-body { 
-  font-family: sans-serif; 
-  margin:0; 
-  padding:0; 
-  background:#f3ebe0; 
-  display:flex; 
-  flex-direction:column; 
-  align-items:center;
-  box-sizing: border-box; 
-  overflow-x: hidden; /* 横スクロール防止 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
-header {
+
+:root {
+  --color-primary: #8B7355;
+  --color-coffee-darkest: #3E2C1F;
+  --color-coffee-dark: #5D4434;
+  --color-coffee-medium: #7D5E4A;
+  --color-coffee-light: #A8927B;
+  --color-cream: #FFF9F0;
+  --color-latte: #EBE0D3;
+  --color-latte-light: #F5EFE5;
+  --color-bg: #F5EFE5;
+  --color-bg-secondary: #FFF9F0;
+  --color-separator: rgba(93, 68, 52, 0.15);
+  --color-text-primary: #3E2C1F;
+  --color-text-secondary: #5D4434;
+  --color-text-tertiary: rgba(93, 68, 52, 0.5);
+  --shadow-sm: 0 1px 2px rgba(62, 44, 31, 0.08);
+  --shadow-md: 0 2px 8px rgba(62, 44, 31, 0.12);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, 'Noto Sans JP', sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text-primary);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ナビゲーションバー */
+.nav-bar {
+  position: sticky;
+  top: 0;
+  background: var(--color-latte);
+  border-bottom: 0.5px solid var(--color-separator);
+  padding: var(--spacing-md);
+  z-index: 100;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.nav-content {
+  max-width: 1200px;
+  margin: 0 auto;
   display: flex;
   align-items: center;
-  position: relative;
   justify-content: space-between;
-  width: 100%;
-  background: #e8d6c3;
-  color: #4b3f36;
-  padding: 20px;
-  font-weight: bold;
-  box-sizing: border-box;
 }
-.logo {
-  font-size: 1.5em;
-  font-weight: bold;
-  padding-left: 0.3em;
-  padding-right: 0.3em;
-  box-sizing: border-box;
+
+.nav-brand {
   flex: 1;
   text-align: center;
 }
-.logo-ja {
-  font-family: 'Noto Sans JP', sans-serif;
-  font-size: medium;
+
+.nav-title {
+  font-size: 20px;
   font-weight: 700;
-  letter-spacing: 2px;
-  padding-bottom: 0.2em;
-}
-.logo-en {
-  font-family: 'Montserrat', sans-serif;
-  font-size: small;
-  font-weight: 600;
-  letter-spacing: 2px;
-  color: #4b3621;
-}
-.spacer {
-  width: 25px; 
+  color: var(--color-coffee-dark);
+  margin-bottom: 2px;
+  letter-spacing: 1px;
 }
 
-/* ハンバーガーボタン */
+.nav-subtitle {
+  font-size: 11px;
+  color: var(--color-coffee-medium);
+  font-weight: 600;
+  letter-spacing: 1.5px;
+}
+
+.nav-spacer {
+  width: 38px;
+}
+
+/* ハンバーガーメニュー */
 .menu-toggle {
   display: flex;
   flex-direction: column;
   cursor: pointer;
-  gap: 5px;
+  gap: 4px;
   z-index: 1001;
-}
-.menu-toggle span {
-  display: block;
-  width: 25px;
-  height: 3px;
-  background: #4b3f36;
-  transition: 0.3s;
+  padding: 8px;
 }
 
-/* メニュー（サイドバー） */
-nav {
+.menu-toggle span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--color-coffee-dark);
+  transition: 0.3s;
+  border-radius: 2px;
+}
+
+.menu-toggle.open span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.menu-toggle.open span:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-toggle.open span:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
+}
+
+/* サイドメニュー */
+.side-menu {
   position: fixed;
   top: 0;
   right: 0;
   width: 250px;
   height: 100%;
-  background: #f3ebe0;
-  box-shadow: -2px 0 8px rgba(0,0,0,0.2);
+  background: var(--color-bg-secondary);
+  box-shadow: -2px 0 8px rgba(62, 44, 31, 0.2);
   display: flex;
   flex-direction: column;
-  padding: 60px 20px;
-  transform: translateX(100%); /* 初期状態は右に隠す */
-  transition: right 0.3s ease;
+  padding: 60px 20px 20px;
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
   z-index: 1000;
 }
-nav.active {
-  transform: translateX(0); /* 表示状態は元の位置 */
+
+.side-menu.active {
+  transform: translateX(0);
 }
-nav a {
-  color: #4b3621;
+
+.side-menu-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 32px;
+  color: var(--color-coffee-dark);
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  line-height: 1;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.side-menu-close:hover {
+  color: var(--color-primary);
+}
+
+.side-menu a {
+  color: var(--color-coffee-dark);
   text-align: left;
-  font-size: 1em;
+  font-size: 16px;
   text-decoration: none;
-  padding: 10px 0;
+  padding: 12px 0;
+  border-bottom: 0.5px solid var(--color-separator);
+  font-weight: 500;
 }
-nav a:hover {
+
+.side-menu a:hover {
+  color: var(--color-primary);
+}
+
+/* メニュー背景オーバーレイ */
+.menu-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(62, 44, 31, 0.4);
+  z-index: 999;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+.menu-overlay.active {
+  display: block;
+}
+
+/* メインコンテンツ */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: var(--spacing-lg);
+  padding-bottom: 80px;
+}
+
+/* ヘッダー */
+.page-header {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+  padding: var(--spacing-xl) 0;
+}
+
+.page-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--color-coffee-darkest);
+  margin-bottom: var(--spacing-sm);
+}
+
+.page-subtitle {
+  font-size: 16px;
+  color: var(--color-text-secondary);
+}
+
+/* 目次 */
+.toc {
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+  box-shadow: var(--shadow-sm);
+}
+
+.toc-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-coffee-dark);
+  margin-bottom: var(--spacing-md);
+}
+
+.toc-list {
+  list-style: none;
+}
+
+.toc-list li {
+  margin-bottom: var(--spacing-sm);
+}
+
+.toc-list a {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.toc-list a:hover {
+  color: var(--color-coffee-dark);
   text-decoration: underline;
 }
 
-/* ハンバーガーを×にする */
-.menu-toggle.open span:nth-child(1) {
-  transform: rotate(45deg) translate(5px, 5px);
-}
-.menu-toggle.open span:nth-child(2) {
-  opacity: 0;
-}
-.menu-toggle.open span:nth-child(3) {
-  transform: rotate(-45deg) translate(6px, -6px);
+/* セクション */
+.section {
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
 }
 
-/* 見出し */
-h1 {
-  font-size: x-large;
-  color:#5a3e2b;
-  text-align: center;
-}
-h2 {
-  font-size: large;
-  color:#5a3e2b;
-  text-align:left;
-  border-left:4px solid #5a3e2b;
-  padding-left: 0.5em;
-  margin: 0.5em 0;
+.section h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--color-coffee-darkest);
+  margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 2px solid var(--color-latte);
 }
 
-p { 
-  font-size: 1em; line-height:1.6; margin-top: 1em; color:#4b3f36; margin-bottom:2em;
+.section h3 {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-coffee-dark);
+  margin-top: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
 }
 
+.section h4 {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--color-coffee-medium);
+  margin-top: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+}
+
+.section p {
+  margin-bottom: var(--spacing-md);
+  color: var(--color-text-secondary);
+}
+
+.section ul, .section ol {
+  margin-left: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+  color: var(--color-text-secondary);
+}
+
+.section li {
+  margin-bottom: var(--spacing-xs);
+}
+
+/* 特殊ボックス */
+.info-box {
+  background: var(--color-latte-light);
+  border-left: 4px solid var(--color-primary);
+  padding: var(--spacing-md);
+  margin: var(--spacing-md) 0;
+  border-radius: var(--radius-sm);
+}
+
+.warning-box {
+  background: #FFF3E0;
+  border-left: 4px solid #FF9800;
+  padding: var(--spacing-md);
+  margin: var(--spacing-md) 0;
+  border-radius: var(--radius-sm);
+}
+
+.warning-box strong {
+  color: #E65100;
+}
+
+/* スクリーンショットプレースホルダー */
 .screenshot {
-  display: block;
-  max-width: 100%;
-  border-radius: 10px;
-  margin: 16px auto;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  background: var(--color-latte-light);
+  border: 2px dashed var(--color-separator);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-xl);
+  margin: var(--spacing-md) 0;
+  text-align: center;
+  color: var(--color-text-tertiary);
+  font-size: 14px;
 }
 
+/* コードブロック */
+.code-block {
+  background: var(--color-coffee-darkest);
+  color: var(--color-cream);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-sm);
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  overflow-x: auto;
+  margin: var(--spacing-md) 0;
+}
 
-footer { 
-  font-family: sans-serif;
+/* テーブル */
+.table-container {
+  overflow-x: auto;
+  margin: var(--spacing-md) 0;
+}
+
+table {
   width: 100%;
-  text-align:center; 
-  padding:20px; 
-  background:#e8d6c3;
-  font-size: small; 
-  color:#4b3f36;
-  box-sizing: border-box;
+  border-collapse: collapse;
+  background: var(--color-bg-secondary);
 }
-footer a { 
-  color:#6b4f3c; 
-  text-decoration:none; 
-  font-weight:500;
-  padding: 20px; 
+
+th, td {
+  padding: var(--spacing-sm);
+  text-align: left;
+  border: 1px solid var(--color-separator);
 }
+
+th {
+  background: var(--color-latte);
+  font-weight: 600;
+  color: var(--color-coffee-dark);
+}
+
+td {
+  color: var(--color-text-secondary);
+}
+
+/* フローチャート */
+.flow-chart {
+  background: var(--color-latte-light);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-sm);
+  margin: var(--spacing-md) 0;
+}
+
+.flow-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+}
+
+.flow-row:last-child {
+  margin-bottom: 0;
+}
+
+.flow-step {
+  background: var(--color-bg-secondary);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+  font-weight: 500;
+  color: var(--color-coffee-dark);
+  font-size: 14px;
+  text-align: center;
+  width: 160px;
+  flex-shrink: 0;
+}
+
+.flow-arrow {
+  font-size: 20px;
+  color: var(--color-primary);
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .flow-step {
+    width: 140px;
+    font-size: 13px;
+    padding: var(--spacing-sm);
+  }
+}
+
+/* フッター */
+footer {
+  width: 100%;
+  text-align: center;
+  padding: var(--spacing-lg);
+  background: var(--color-latte);
+  font-size: 12px;
+  color: var(--color-coffee-dark);
+  margin-top: var(--spacing-xl);
+}
+
+footer a {
+  color: var(--color-coffee-medium);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0 var(--spacing-sm);
+}
+
 footer a:hover {
-  text-decoration:underline; 
+  text-decoration: underline;
 }
-footer p {
-  padding-top: 20px;
-  padding-bottom: 20px;
-  margin: 0;  
-}
-footer div {
+
+.footer-links {
   display: flex;
   justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
 }
-.container { 
-  font-weight: normal; 
-  max-width:900px; 
-  width:95%; 
-  padding:20px; 
-  background:#fff8f0; 
-  margin:20px auto; 
-  border-radius:10px; 
-  box-shadow:0 0 10px rgba(0,0,0,0.1); 
-  box-sizing: border-box;
+
+/* レスポンシブ */
+@media (max-width: 768px) {
+  .container {
+    padding: var(--spacing-md);
+  }
+
+  .page-title {
+    font-size: 24px;
+  }
+
+  .section h2 {
+    font-size: 20px;
+  }
+
+  .section h3 {
+    font-size: 18px;
+  }
+
+  table {
+    font-size: 12px;
+  }
+
+  th, td {
+    padding: 6px;
+  }
 }
 </style>
-
-<!-- adsenseコード--> 
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6466859230595575"
-     crossorigin="anonymous"></script>
-<!--googlefont-->
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@700&family=Montserrat:wght@600&display=swap" rel="stylesheet">
-
 </head>
-
 <body>
-  <header>
-    <div class="spacer"></div>
-    <div class="logo">
-      <div class="logo-ja">自家焙煎コーヒー記録管理</div>
-      <div class="logo-en">COFFEE ROASTING LOG</div>
-    </div>
-    <div class="menu-toggle" id="menu-toggle">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-  </header>
 
-  <!-- サイドバー -->
-  <nav id="nav">
-    <a href="/">ホーム</a>
-    <a href="/howtouse.html">サイトの利用方法</a>
-    <a href="/inquiryform.html">お問い合わせ</a>
-    <a href="/privacy.html">プライバシーポリシー</a>
-  </nav>
+<div class="nav-bar">
+  <div class="nav-content">
+    <div class="nav-spacer"></div>
+    <div class="nav-brand">
+      <div class="nav-title">自家焙煎コーヒー記録管理</div>
+      <div class="nav-subtitle">COFFEE ROASTING LOG</div>
+    </div>
+    <div class="menu-toggle" id="menuToggle">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+</div>
 
-  <div class="container">
-    <h1>当サービスの利用方法</h1>
-    <h2>概要</h2>
-    <p>当サイトでは、個人で自家焙煎をされる方が手軽にコーヒー焙煎のログ記録・管理が行えるよう簡易的なコーヒー焙煎記録管理ツール「COFFEE ROASTING LOG」を提供しています。</p>
-    <h2>1. 基本情報入力</h2>
-    <p>焙煎する豆の情報や日付、コメントなどを記録することができます。入力した情報はいつでも編集・削除が可能です。*編集/削除方法は⑤を参照</p>
-    <img src="images/howtouse_basic_info.png" alt="基本情報入力" class="screenshot" >
-    <p>・ 豆の名前：焙煎する生豆の名称を入力します。<br>
-       ・ 焙煎日：焙煎を行う日付を選択します。<br>
-       ・ 投入温度(℃)：生豆を焙煎機に投入する温度を入力します。*事前に投入の目標温度を入力しておくと余裕をもって投入ができます。<br>
-       ・ 焙煎前重量(g)：焙煎前の生豆の重量を入力します。*焙煎度の自動判定に利用しますので、ハンドピック後の重量の入力をお勧めします。<br>
-       ・ 焙煎後重量(g)：焙煎終了後に焼きあがった豆の重量を入力します。*焙煎度の自動判定に利用しますので、焼き上がり直後(ハンドピック前)の重量の入力をお勧めします。<br>
-       ・ 焙煎度：浅煎り/中煎り/深煎りを自動で判定します。焙煎指数を“「焙煎前重量」/「焙煎後重量」×100”の形で計算し、計算結果＜1.15=浅煎り、1.15≦計算結果＜1.2=中煎り、1.2≦計算結果=深煎りと判定しています。焙煎度判定の参考にご利用ください。<br>
-       ・ コメント：フリーテキストで焙煎に関するコメントが入力できます。焙煎の目標や結果、プロファイルなどを記録することで振り返りができるようになっています。
-    </p>
-    <h2>2. タイマー</h2>
-    <p>タイマーを起動し、焙煎をスタートします。「開始」を押すと、基本情報に入力した投入温度を開始時点の温度として記録します。また、「1ハゼ」や「2ハゼ」、「終了」ボタンを押すことで焙煎における重要ポイントの時間や温度を記録することができます。</p>
-     <img src="images/howtouse_timer.png" alt="タイマー" class="screenshot" >
-    <p>・ 開始：タイマーを開始します。<br>
-       ・ 一時停止：タイマーを一時停止します。<br>
-       ・ 1ハゼ：1ハゼ開始時点の時間と温度を記録します。*時間はボタン押下時点の時間を自動取得しますが、温度は手動入力になります。<br>
-       ・ 2ハゼ：2ハゼ開始時点の時間と温度を記録します。*時間はボタン押下時点の時間を自動取得しますが、温度は手動入力になります。<br>
-       ・ リセット(タイマー/グラフ)：タイマーとグラフの情報をリセットします。「焙煎記録を保存する」ボタンを押す前にリセットを行うとログが消えますのでご注意ください。<br>
-       ・ 終了：タイマーを終了し、焙煎終了時の時間と温度を記録します。*時間はボタン押下時点の時間を自動取得しますが、温度は手動入力になります。<br>
-       ・ 焙煎記録を保存する：基本情報欄で入力した情報と焙煎のログ(時間・温度変化・グラフ)を保存します。*時間経過・温度・グラフは保存後の修正はできません。
-    </p>
-    <h2>3. 温度入力/グラフ表示</h2>
-    <p>タイマーの時間経過を見ながら温度を入力し、グラフを記録していきます。「記録」をクリックすると、クリック時点の時間に対して入力した温度が記録されます。30秒や1分ごとに温度入力を行うことで画面上に自動で焙煎グラフが作成されていきます。</p>
-     <img src="images/howtouse_graph.png" alt="温度入力/画面" class="screenshot" >
-    <p>・ 温度：グラフに温度を反映するために温度を入力します。*温度の確認については、ご自身で用意した温度計をご利用ください。<br>
-       ・ 記録：「温度」欄に入力した情報を記録します。記録することでクリック時点の経過時間と共に温度がグラフに自動反映されます。
-    </p> 
-    <h2>5. 記録管理</h2>
-    <p>過去の焙煎記録を確認できます。記録の数が増えてきた場合には、「豆」「焙煎年」「焙煎月」「焙煎度」でフィルターをかけて検索することができます。</p>
-     <img src="images/howtouse_past_record.png" alt="記録管理" class="screenshot" >
-    <p>・ 記録を表示：クリックして過去に保存した焙煎情報を表示します。<br>
-       ・ CSV出力：保存された焙煎情報をCSV形式で出力できます。<br>
-       ・ フィルター機能：焙煎履歴が多い場合などにフィルターをかけて焙煎情報を探すことができます。*フィルターを選択して「記録を表示」をクリックしてください。<br>
-       ・ 焙煎情報一覧：過去の焙煎情報が表形式で確認できます。基本情報に入力した情報が表示され、各行をクリックすることで選択した焙煎記録のグラフが表示されます。。また、うまくいった焙煎記録はお気に入りとして保存することができます。加えて、編集/削除ボタンをクリックすることで情報の編集や削除が可能です。それぞれの焙煎プロファイルに対する味のコメントなどを後で追記すると振り返りに活用できます。
-    </p>
+<!-- サイドメニュー -->
+<div class="menu-overlay" id="menuOverlay"></div>
+<nav class="side-menu" id="sideMenu">
+  <button class="side-menu-close" id="menuClose">&times;</button>
+  <a href="/">ホーム</a>
+  <a href="/howtouse.html">サイトの利用方法</a>
+  <a href="/inquiryform.html">お問い合わせ</a>
+  <a href="/privacy.html">プライバシーポリシー</a>
+</nav>
+
+<div class="container">
+  
+  <div class="page-header">
+    <h1 class="page-title">使い方ガイド</h1>
+    <p class="page-subtitle">このガイドでは、焙煎記録の入力から履歴の確認まで、すべての機能を詳しく説明します。</p>
   </div>
 
-  <footer>
-    <div id="footer-guide">
-      <a href="/">ホーム</a>
-      <p> | </p>
-      <a href="/howtouse.html">サイトの利用方法</a>
-      <p> | </p>
-      <a href="/privacy.html">プライバシー</a>
+  <!-- 目次 -->
+  <div class="toc">
+    <h2 class="toc-title">目次</h2>
+    <ol class="toc-list">
+      <li><a href="#intro">はじめに</a></li>
+      <li><a href="#basic">基本的な使い方</a></li>
+      <li><a href="#roast-info">焙煎情報の入力</a></li>
+      <li><a href="#timer">タイマー機能</a></li>
+      <li><a href="#temperature">温度管理</a></li>
+      <li><a href="#save">記録の保存</a></li>
+      <li><a href="#history">焙煎履歴の確認</a></li>
+      <li><a href="#export">データのエクスポート</a></li>
+      <li><a href="#faq">よくある質問</a></li>
+    </ol>
+  </div>
+
+  <!-- はじめに -->
+  <div class="section" id="intro">
+    <h2>はじめに</h2>
+    
+    <p>このアプリは、自家焙煎コーヒーの記録を簡単に管理できるWebアプリケーションです。ブラウザ上で動作し、インストール不要ですぐに使い始められます。</p>
+    
+    <h3>主な機能</h3>
+    <ul>
+      <li><strong>焙煎タイマー</strong>: 焙煎時間を正確に計測</li>
+      <li><strong>温度記録</strong>: 焙煎中の温度変化をグラフで可視化</li>
+      <li><strong>履歴管理</strong>: 過去の焙煎記録を検索・比較</li>
+      <li><strong>データ分析</strong>: CSV出力で詳細な分析が可能</li>
+    </ul>
+
+    <h3>データの保存について</h3>
+    <div class="warning-box">
+      <strong>⚠️ 重要：データ保存の注意点</strong><br>
+      <p style="margin-top: 8px;">本アプリは、ブラウザの「ローカルストレージ」にデータを保存します。以下の点にご注意ください：</p>
     </div>
-  </footer>
 
-  <script>
-    const toggle = document.getElementById("menu-toggle");
-    const nav = document.getElementById("nav");
+    <h4>ブラウザ別の保存期間</h4>
+    <ul style="margin-bottom: var(--spacing-md);">
+      <li><strong>Chrome・Edge</strong>: 基本的に無期限。ただし、ストレージ容量が逼迫すると古いデータから削除される場合があります</li>
+      <li><strong>Safari</strong>: 7日間アクセスがないと削除される可能性があります（iOS版は特に注意）</li>
+      <li><strong>Firefox</strong>: 基本的に無期限。ユーザーが明示的に削除しない限り保持されます</li>
+    </ul>
 
-    toggle.addEventListener("click", () => {
-      nav.classList.toggle("active"); // サイドバー表示
-      toggle.classList.toggle("open"); // ハンバーガーを×に
+    <h4>シークレットモード・プライベートブラウジング</h4>
+    <div class="info-box">
+      <strong>注意:</strong> シークレットモード（プライベートブラウジング）で使用した場合、ブラウザを閉じると<strong>すべてのデータが削除</strong>されます。通常モードでのご利用を推奨します。
+    </div>
+
+    <h4>データが削除されないための対策</h4>
+    <ol style="margin-left: 20px; color: var(--color-text-secondary); margin-bottom: var(--spacing-md);">
+      <li><strong>定期的にCSV出力</strong>してバックアップを取る（月1回推奨）</li>
+      <li><strong>週1回程度はアプリにアクセス</strong>する（Safari対策）</li>
+      <li><strong>ブラウザの履歴削除時</strong>、「Cookie とサイトデータ」を削除しない</li>
+    </ol>
+
+    <div class="info-box">
+      <strong>推奨:</strong> 大切な記録を失わないために、月に一度は「CSV出力」機能を使ってバックアップを取ることをおすすめします。
+    </div>
+  </div>
+
+  <!-- 基本的な使い方 -->
+  <div class="section" id="basic">
+    <h2>基本的な使い方</h2>
+    
+    <h3>画面構成</h3>
+    <p>アプリは以下のセクションで構成されています：</p>
+    <ol>
+      <li><strong>焙煎情報</strong>: 豆の名前、重量などの基本情報を入力</li>
+      <li><strong>タイマー</strong>: 焙煎時間を計測</li>
+      <li><strong>温度カーブ</strong>: 温度変化をグラフで確認</li>
+      <li><strong>焙煎履歴</strong>: 過去の記録を確認・検索</li>
+    </ol>
+
+    <div class="screenshot">
+    <img src="images/landscape.png" alt="画面構成" style="width: 100%; border-radius: 8px;">
+    </div>
+
+    <h3>推奨される使い方の流れ</h3>
+    <div class="flow-chart">
+      <div class="flow-row">
+        <div class="flow-step">1. 焙煎情報を入力</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">2. タイマー開始</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">3. 温度を記録</div>
+      </div>
+      <div style="text-align: center; font-size: 20px; color: var(--color-primary); font-weight: bold;">↓</div>
+      <div class="flow-row">
+        <div class="flow-step">4. 1ハゼ・2ハゼをマーク</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">5. 焙煎終了</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">6. 記録を保存</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 焙煎情報の入力 -->
+  <div class="section" id="roast-info">
+    <h2>焙煎情報の入力</h2>
+    
+    <p>焙煎を始める前に、豆の情報を入力します。</p>
+
+    <h3>焙煎情報セクションを開く</h3>
+    <p>初期状態では焙煎情報セクションは閉じています。<strong>「焙煎情報を入力」ボタン</strong>をクリックして開きます。</p>
+
+    <div class="screenshot">
+    <img src="images/basic_info.png" alt="基本情報の入力" style="width: 100%; border-radius: 8px;">
+    </div>
+
+    <h3>入力項目</h3>
+    
+    <h4>必須項目</h4>
+    <ul>
+      <li><strong>豆の名前</strong>: 焙煎する豆の名前（例: エチオピア イルガチェフ）</li>
+      <li><strong>焙煎日</strong>: 焙煎を行う日付</li>
+      <li><strong>焙煎前重量</strong>: 焙煎前の豆の重量（グラム）</li>
+      <li><strong>焙煎後重量</strong>: 焙煎後の豆の重量（グラム）</li>
+    </ul>
+
+    <h4>任意項目</h4>
+    <ul>
+      <li><strong>投入温度</strong>: 豆を投入した時の釜の温度（℃）</li>
+      <li><strong>焙煎度</strong>: 自動計算されます（焙煎前後の重量から算出）</li>
+      <li><strong>コメント</strong>: 焙煎時の気づきやメモ</li>
+    </ul>
+
+    <h3>焙煎度の自動計算</h3>
+    <p>焙煎前重量と焙煎後重量を入力すると、<strong>焙煎度が自動計算</strong>されます。</p>
+
+    <ul>
+      <li><strong>焙煎指数 &lt; 1.15</strong>: 浅煎り</li>
+      <li><strong>1.15 ≤ 焙煎指数 &lt; 1.2</strong>: 中煎り</li>
+      <li><strong>焙煎指数 ≥ 1.2</strong>: 深煎り</li>
+    </ul>
+
+    <div class="info-box">
+      <strong>例:</strong> 焙煎前300g → 焙煎後255g = 中煎り（1.176）
+    </div>
+  </div>
+
+  <!-- タイマー機能 -->
+  <div class="section" id="timer">
+    <h2>タイマー機能</h2>
+    
+    <p>焙煎時間を正確に計測します。</p>
+
+    <div class="screenshot">
+    <img src="images/timer.png" alt="タイマー機能" style="width: 100%; border-radius: 8px;">
+    </div>
+
+    <h3>タイマーの使い方</h3>
+
+    <h4>1. 開始ボタン</h4>
+    <p>焙煎を開始したら<strong>「開始」ボタン</strong>をクリックします。タイマーが00:00:00から計測を開始します。</p>
+
+    <h4>2. 一時停止ボタン</h4>
+    <p>一時的にタイマーを止めたい場合は<strong>「一時停止」ボタン</strong>をクリックします。再度「開始」で再開できます。</p>
+
+    <h4>3. 1ハゼ・2ハゼボタン</h4>
+    <ul>
+      <li><strong>1ハゼ</strong>: 最初のハゼ音が聞こえたら<strong>「1ハゼ」ボタン</strong>をクリック</li>
+      <li><strong>2ハゼ</strong>: 2回目のハゼ音が聞こえたら<strong>「2ハゼ」ボタン</strong>をクリック</li>
+    </ul>
+    <p>ボタンを押すと温度入力画面が表示されます。</p>
+
+    <div class="screenshot">
+    <img src="images/temp_input.png" alt="各ポイントでの温度入力" style="width: 100%; border-radius: 8px;">
+    </div>
+
+    <h4>4. 終了ボタン</h4>
+    <p>焙煎が完了したら<strong>「終了」ボタン</strong>をクリックします。終了時の温度を入力してください。</p>
+
+    <h4>5. リセットボタン</h4>
+    <p>タイマーと温度データをすべてリセットします。</p>
+
+    <h3>フローティングタイマー</h3>
+    <p>画面をスクロールしてタイマーが見えなくなると、<strong>画面右下に小さな円形タイマー</strong>が表示されます。</p>
+
+    <div class="screenshot">
+    <img src="images/floatingtimer.png" alt="フローティングタイマー" style="width: 100%; border-radius: 8px;">
+    </div>
+
+    <p>これにより、下部の履歴を見ながらでも焙煎時間を確認できます。</p>
+  </div>
+
+  <!-- 温度管理 -->
+  <div class="section" id="temperature">
+    <h2>温度管理</h2>
+    
+    <p>焙煎中の温度変化を記録し、グラフで可視化します。</p>
+
+    <div class="screenshot">
+    <img src="images/temp_curve.png" alt="焙煎温度の経過記録機能" style="width: 100%; border-radius: 8px;">
+    </div>
+
+    <h3>温度の記録方法</h3>
+
+    <h4>手動で温度を記録</h4>
+    <ol>
+      <li>温度入力欄に現在の温度（℃）を入力</li>
+      <li><strong>「記録」ボタン</strong>をクリック</li>
+    </ol>
+    <p>温度は何度でも記録できます。</p>
+
+    <h4>自動で記録される温度</h4>
+    <p>以下のタイミングでは自動的に温度入力画面が表示されます：</p>
+    <ul>
+      <li>1ハゼボタンをクリックした時</li>
+      <li>2ハゼボタンをクリックした時</li>
+      <li>終了ボタンをクリックした時</li>
+    </ul>
+
+    <h3>温度ログ表示</h3>
+    <p><strong>1ハゼ / 2ハゼ / 終了</strong>の時間が見やすく表示されます。</p>
+
+    <div class="screenshot">
+    <img src="images/temp_log.png" alt="各ポイント時の経過時間を表示" style="width: 100%; border-radius: 8px;">
+    </div>
+
+    <div class="info-box">
+      <strong>表示例:</strong><br>
+      1ハゼ: 05:30　　2ハゼ: 07:45　　終了: 09:15
+    </div>
+
+    <h3>温度カーブグラフ</h3>
+    <p>記録した温度は自動的にグラフ化されます。</p>
+
+    <div class="screenshot">
+    <img src="images/temp_graph.png" alt="焙煎の温度カーブ表示" style="width: 100%; border-radius: 8px;">
+    </div>
+
+    <h4>グラフの見方</h4>
+    <ul>
+      <li><strong>茶色の線</strong>: 今回の焙煎</li>
+      <li><strong>灰色の線</strong>: 比較対象の焙煎（履歴から選択した場合）</li>
+      <li><strong>縦線</strong>: 1ハゼ・2ハゼ・終了のタイミング</li>
+    </ul>
+  </div>
+
+  <!-- 記録の保存 -->
+  <div class="section" id="save">
+    <h2>記録の保存</h2>
+    
+    <p>焙煎が完了したら、記録を保存します。</p>
+
+    <h3>保存手順</h3>
+    <ol>
+      <li>焙煎情報セクションの最下部にある<strong>「焙煎記録を保存する」ボタン</strong>をクリック</li>
+    </ol>
+
+    <div class="screenshot">
+    <img src="images/save_log.png" alt="焙煎記録の保存" style="width: 100%; border-radius: 8px;">
+    </div>
+
+    <ol start="2">
+      <li>確認メッセージが表示されたら完了</li>
+    </ol>
+
+    <h3>保存される内容</h3>
+    <ul>
+      <li>焙煎情報（豆の名前、日付、重量など）</li>
+      <li>タイマー記録（1ハゼ、2ハゼ、終了時間）</li>
+      <li>温度ログ（すべての記録された温度）</li>
+      <li>温度グラフデータ</li>
+    </ul>
+
+    <div class="warning-box">
+      <strong>⚠️ 注意事項</strong><br>
+      必須項目が未入力の場合は保存できません：
+      <ul style="margin-top: 8px; margin-bottom: 0;">
+        <li>豆の名前</li>
+        <li>焙煎日</li>
+        <li>焙煎前重量</li>
+        <li>焙煎後重量</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 焙煎履歴の確認 -->
+  <div class="section" id="history">
+    <h2>焙煎履歴の確認</h2>
+    
+    <p>過去の焙煎記録を確認・検索します。</p>
+
+    <h3>履歴の表示</h3>
+    <p>画面右側（またはモバイルでは下部）に焙煎履歴が表示されます。</p>
+
+    <div class="screenshot">
+    <img src="images/roast_history.png" alt="焙煎履歴の表示" style="width: 100%; border-radius: 8px;">
+    </div>
+
+    <h3>フィルター機能</h3>
+    <p>履歴を絞り込んで表示できます。</p>
+
+    <div class="screenshot">
+    <img src="images/roast_history_filter.png" alt="焙煎履歴の検索" style="width: 100%; border-radius: 8px;">
+    </div>
+
+    <h4>フィルター項目</h4>
+    <ul>
+      <li><strong>豆</strong>: 特定の豆の記録のみ表示</li>
+      <li><strong>年</strong>: 焙煎年で絞り込み</li>
+      <li><strong>月</strong>: 焙煎月で絞り込み</li>
+      <li><strong>焙煎度</strong>: 浅煎り・中煎り・深煎りで絞り込み</li>
+    </ul>
+
+    <h4>フィルターの使い方</h4>
+    <ol>
+      <li>各ドロップダウンから条件を選択</li>
+      <li><strong>「表示更新」ボタン</strong>をクリック</li>
+    </ol>
+
+    <h4>お気に入りのみ表示</h4>
+    <p><strong>「⭐のみ」ボタン</strong>をクリックすると、お気に入りに登録した記録のみ表示されます。</p>
+
+
+    <h3>履歴カードの操作</h3>
+    <p>各履歴カードには以下の操作ボタンがあります。</p>
+
+    <div class="screenshot">
+    <img src="images/roasting_card.png" alt="焙煎情報の編集" style="width: 100%; border-radius: 8px;">
+    </div>
+
+    <h4>⭐（お気に入り）</h4>
+    <ul>
+      <li>☆をクリックすると★に変わり、お気に入り登録されます</li>
+      <li>もう一度クリックすると解除されます</li>
+    </ul>
+
+    <h4>✏️（編集）</h4>
+    <p>記録内容を編集できます。</p>
+
+    <div class="screenshot">
+    <img src="images/edit_card.png" alt="焙煎情報の編集" style="width: 100%; border-radius: 8px;">
+    </div>
+
+    <p>編集できる項目：</p>
+    <ul>
+      <li>豆名</li>
+      <li>焙煎日</li>
+      <li>投入温度</li>
+      <li>焙煎前重量</li>
+      <li>焙煎後重量</li>
+      <li>コメント</li>
+    </ul>
+    <p>編集後、<strong>「保存」ボタン</strong>をクリックして確定します。</p>
+
+    <h4>🗑️（削除）</h4>
+    <p>記録を削除します。確認メッセージが表示されます。</p>
+
+    <h3>履歴との比較</h3>
+    <p>履歴カードをクリックすると、その記録の温度グラフが<strong>温度カーブセクション</strong>に表示されます。</p>
+    <p>これにより、過去の焙煎と今回の焙煎を比較できます。</p>
+  </div>
+
+  <!-- データのエクスポート -->
+  <div class="section" id="export">
+    <h2>データのエクスポート</h2>
+    
+    <p>焙煎記録をCSVファイルとして出力し、Excelやデータ分析ツールで活用できます。</p>
+
+    <h3>CSV出力手順</h3>
+    <ol>
+      <li>焙煎履歴セクションの<strong>「CSV出力」ボタン</strong>をクリック</li>
+    </ol>
+
+    <div class="screenshot">
+    <img src="images/csv_export.png" alt="CSVエクスポート機能" style="width: 100%; border-radius: 8px;">
+    </div>
+
+    <ol start="2">
+      <li>CSVファイルが自動的にダウンロードされます
+        <ul>
+          <li>ファイル名: <code>roast_log_YYYYMMDD.csv</code></li>
+        </ul>
+      </li>
+    </ol>
+
+    <h3>CSVファイルの内容</h3>
+    <p>データ分析に最適化された形式で出力されます。</p>
+
+    <h4>出力される列</h4>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>列名</th>
+            <th>説明</th>
+            <th>例</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>記録ID</td>
+            <td>一意の識別子</td>
+            <td>1234567890-abc123</td>
+          </tr>
+          <tr>
+            <td>焙煎日</td>
+            <td>焙煎を行った日</td>
+            <td>2026-03-07</td>
+          </tr>
+          <tr>
+            <td>豆名</td>
+            <td>豆の名前</td>
+            <td>エチオピア イルガチェフ</td>
+          </tr>
+          <tr>
+            <td>投入温度_℃</td>
+            <td>投入時の温度</td>
+            <td>200</td>
+          </tr>
+          <tr>
+            <td>焙煎前重量_g</td>
+            <td>焙煎前の重量</td>
+            <td>300</td>
+          </tr>
+          <tr>
+            <td>焙煎後重量_g</td>
+            <td>焙煎後の重量</td>
+            <td>255</td>
+          </tr>
+          <tr>
+            <td>減量率_%</td>
+            <td>自動計算された減量率</td>
+            <td>15.00</td>
+          </tr>
+          <tr>
+            <td>焙煎指数</td>
+            <td>焙煎前÷焙煎後</td>
+            <td>1.176</td>
+          </tr>
+          <tr>
+            <td>焙煎度</td>
+            <td>カテゴリ</td>
+            <td>中煎り</td>
+          </tr>
+          <tr>
+            <td>1ハゼ時間_秒</td>
+            <td>秒数（分析用）</td>
+            <td>330</td>
+          </tr>
+          <tr>
+            <td>1ハゼ時間_mm:ss</td>
+            <td>表示形式</td>
+            <td>05:30</td>
+          </tr>
+          <tr>
+            <td>1ハゼ温度_℃</td>
+            <td>1ハゼ時の温度</td>
+            <td>195</td>
+          </tr>
+          <tr>
+            <td>2ハゼ時間_秒</td>
+            <td>秒数（分析用）</td>
+            <td>465</td>
+          </tr>
+          <tr>
+            <td>2ハゼ時間_mm:ss</td>
+            <td>表示形式</td>
+            <td>07:45</td>
+          </tr>
+          <tr>
+            <td>2ハゼ温度_℃</td>
+            <td>2ハゼ時の温度</td>
+            <td>210</td>
+          </tr>
+          <tr>
+            <td>終了時間_秒</td>
+            <td>秒数（分析用）</td>
+            <td>555</td>
+          </tr>
+          <tr>
+            <td>終了時間_mm:ss</td>
+            <td>表示形式</td>
+            <td>09:15</td>
+          </tr>
+          <tr>
+            <td>終了温度_℃</td>
+            <td>終了時の温度</td>
+            <td>220</td>
+          </tr>
+          <tr>
+            <td>総焙煎時間_秒</td>
+            <td>秒数（分析用）</td>
+            <td>555</td>
+          </tr>
+          <tr>
+            <td>総焙煎時間_mm:ss</td>
+            <td>表示形式</td>
+            <td>09:15</td>
+          </tr>
+          <tr>
+            <td>お気に入り</td>
+            <td>0=通常, 1=お気に入り</td>
+            <td>1</td>
+          </tr>
+          <tr>
+            <td>コメント</td>
+            <td>メモ</td>
+            <td>良好な仕上がり</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- よくある質問 -->
+  <div class="section" id="faq">
+    <h2>よくある質問</h2>
+
+    <h3>Q1. データはどこに保存されますか？</h3>
+    <p><strong>A.</strong> ブラウザのローカルストレージに保存されます。インターネット接続がなくても使用できますが、ブラウザのデータを削除すると記録も消えてしまいます。定期的にCSV出力でバックアップを取ることをおすすめします。</p>
+
+    <h3>Q2. スマートフォンでも使えますか？</h3>
+    <p><strong>A.</strong> はい、スマートフォンでも快適に使用できます。画面サイズに応じてレイアウトが最適化されます。</p>
+
+    <h3>Q3. 焙煎度の計算方法は？</h3>
+    <p><strong>A.</strong> 焙煎指数 = 焙煎前重量 ÷ 焙煎後重量 で計算されます。</p>
+    <ul>
+      <li>1.15未満: 浅煎り</li>
+      <li>1.15〜1.2: 中煎り</li>
+      <li>1.2以上: 深煎り</li>
+    </ul>
+
+    <h3>Q4. 1ハゼや2ハゼを記録し忘れた場合は？</h3>
+    <p><strong>A.</strong> 保存後に編集機能を使って修正できます。ただし、温度記録は追加できないため、焙煎中にできるだけ記録することをおすすめします。</p>
+
+    <h3>Q5. 複数の端末で同じデータを共有できますか？</h3>
+    <p><strong>A.</strong> 現在、データは各ブラウザのローカルストレージに保存されるため、端末間での共有はできません。CSV出力してデータを移行することは可能です。</p>
+
+    <h3>Q6. グラフが表示されません</h3>
+    <p><strong>A.</strong> 温度を記録していない場合、グラフは表示されません。最低でも2つ以上の温度記録が必要です。</p>
+
+    <h3>Q7. タイマーをリセットすると何が消えますか？</h3>
+    <p><strong>A.</strong> リセットボタンを押すと以下がすべてリセットされます：</p>
+    <ul>
+      <li>タイマー（00:00:00に戻る）</li>
+      <li>温度ログ</li>
+      <li>1ハゼ・2ハゼの記録</li>
+      <li>温度グラフ</li>
+    </ul>
+    <p>焙煎情報セクションの入力内容はリセットされません。</p>
+
+    <h3>Q8. フローティングタイマーが表示されません</h3>
+    <p><strong>A.</strong> フローティングタイマーは、ページをスクロールしてタイマー表示部分が画面外に出た時のみ表示されます。タイマーが画面内にある場合は表示されません。</p>
+  </div>
+
+  <!-- お問い合わせ -->
+  <div class="section">
+    <h2>お問い合わせ</h2>
+    <p>ご不明な点やご要望がございましたら、画面右上のメニューから<strong>「お問い合わせ」</strong>をご利用ください。</p>
+    <div class="screenshot">
+    <img src="images/inqury_form.png" alt="お問い合わせ方法" style="width: 100%; border-radius: 8px;">
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-links">
+    <a href="/">ホーム</a>
+    <span>|</span>
+    <a href="/howtouse.html">サイトの利用方法</a>
+    <span>|</span>
+    <a href="/inquiryform.html">お問い合わせ</a>
+    <span>|</span>
+    <a href="/privacy.html">プライバシーポリシー</a>
+  </div>
+  <p style="margin-top: 12px;">&copy; 2025 自家焙煎コーヒー記録管理. All rights reserved.</p>
+</footer>
+
+<script>
+  // ハンバーガーメニュー
+  const menuToggle = document.getElementById("menuToggle");
+  const sideMenu = document.getElementById("sideMenu");
+  const menuClose = document.getElementById("menuClose");
+  const menuOverlay = document.getElementById("menuOverlay");
+
+  const openMenu = () => {
+    sideMenu.classList.add("active");
+    menuToggle.classList.add("open");
+    menuOverlay.classList.add("active");
+  };
+
+  const closeMenu = () => {
+    sideMenu.classList.remove("active");
+    menuToggle.classList.remove("open");
+    menuOverlay.classList.remove("active");
+  };
+
+  menuToggle.addEventListener("click", openMenu);
+  menuClose.addEventListener("click", closeMenu);
+  menuOverlay.addEventListener("click", closeMenu);
+
+  // スムーススクロール
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
     });
-  </script>
+  });
+</script>
 
 </body>
 </html>
